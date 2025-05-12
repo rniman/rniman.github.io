@@ -4,7 +4,7 @@
 알고리즘, 렌더링, 서버/클라이언트 시스템 등 다양한 기술 개념을 정리하고,  
 문제 풀이, 프로젝트 회고, 개인적인 관심사까지 기록합니다.
 
-👉 실제 블로그 주소: [https://yourusername.github.io](https://yourusername.github.io)
+👉 실제 블로그 주소: [https://rniman.github.io](https://rniman.github.io)
 
 ---
 
@@ -50,9 +50,11 @@ categories: [Algorithm, DP]
 tags: [TopDown, Memoization]
 description: "DP 점화식 정리에 대한 글입니다."
 ---
+```
 
 ```bash
 ---
 bundle install # 설치안되어있다면
 bundle exec jekyll serve
 ---
+```
