@@ -6,7 +6,7 @@ tags: [DX12, C++, coding convention]
 author: "rniman"                            # for single entry
 # or
 # authors: [<author1_id>, <author2_id>]   # for multiple entries
-description: "DirectX12와 C++ 개인 코딩 컨벤션"
+description: "DirectX12와 C++ 개인 코딩 컨벤션을 정리한 글입니다."
 
 comments: false # 댓글 기능
 ---
