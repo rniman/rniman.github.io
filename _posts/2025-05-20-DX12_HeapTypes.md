@@ -1,7 +1,7 @@
 ---
 title: DirecX12 개인 메모 | D3D12_HEAP_TYPE_DEFAULT vs D3D12_HEAP_TYPE_UPLOAD
 date: 2025-05-20 00:29:20 +0900
-categories: [Rendering, DirectX]
+categories: [Rendering, Rendering\DirectX]
 tags: [DX12, Resource, Note, LowLevel]
 author: "rniman"                            # for single entry
 # or

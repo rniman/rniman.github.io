@@ -1,7 +1,7 @@
 ---
 title: Convention | DirectX12 & C++ Coding Convention
 date: 2025-05-14 23:25:49 +0900
-categories: [Convention, DirectX]
+categories: [Convention, Convention\DirectX]
 tags: [DX12, C++, coding convention]
 author: "rniman"                            # for single entry
 # or
