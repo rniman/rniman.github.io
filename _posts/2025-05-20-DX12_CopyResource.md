@@ -2,7 +2,7 @@
 title: DirecX12 개인 메모 | CopyResource vs CopyBufferRegion
 date: 2025-05-20 00:10:23 +0900
 categories: [Rendering, Rendering\DirectX]
-tags: [DX12, Resource, Note, LowLevel]
+tags: [DX12, Resource, Note, Low Level]
 author: "rniman"                            # for single entry
 # or
 # authors: [<author1_id>, <author2_id>]   # for multiple entries

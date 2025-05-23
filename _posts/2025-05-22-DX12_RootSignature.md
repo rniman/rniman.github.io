@@ -2,7 +2,7 @@
 title: DirecX12 개인 메모 | Root Signature
 date: 2025-05-22 15:23:00 +0900
 categories: [Rendering, Rendering\DirectX]
-tags: [DX12, RootSignature, Pipeline, Note]
+tags: [DX12, Root Signature, Pipeline, Note]
 author: "rniman"                            # for single entry
 # or
 # authors: [<author1_id>, <author2_id>]   # for multiple entries
