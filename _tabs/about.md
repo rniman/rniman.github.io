@@ -4,21 +4,10 @@ icon: fas fa-info-circle
 order: 4
 ---
 
-<!-- > Add Markdown syntax content to file `_tabs/about.md`{: .filepath } and it will show up on this page.
-{: .prompt-tip } -->
-
 <style>
-/* 언어 콘텐츠 기본적으로 숨김 */
-.lang-section {
-  display: none;
-}
+.lang-section { display: none; }
+.lang-section.active { display: block; }
 
-/* 선택된 언어만 보이기 */
-.lang-section.active {
-  display: block;
-}
-
-/* 버튼 스타일 */
 .lang-toggle {
   display: flex;
   gap: 10px;
@@ -35,24 +24,21 @@ order: 4
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
-
 .lang-toggle button:hover {
   background-color: #007acc;
   color: white;
 }
-
 .lang-toggle button.active {
   background-color: #007acc;
   color: white;
 }
 </style>
 
-<!-- 언어 선택 버튼 -->
+<!-- 버튼 영역 -->
 <div class="lang-toggle">
-  <button id="btn-ko" class="active" onclick="toggleLang('ko')">🇰🇷 한국어</button>
-  <button id="btn-en" onclick="toggleLang('en')">🇺🇸 English</button>
+  <button id="btn-ko" class="active">🇰🇷 한국어</button>
+  <button id="btn-en">🇺🇸 English</button>
 </div>
-
 
 <div class="lang-section lang-ko active">
   <h2>👋 안녕하세요! 저의 블로그를 방문해주셔서 감사합니다.</h2>
@@ -210,18 +196,22 @@ order: 4
   </ul>
 </div>
 
+
+<!-- 자바스크립트 (DOMContentLoaded 이후 안전하게 연결) -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  function toggleLang(lang) {
-    document.querySelectorAll('.lang-section').forEach(div => div.classList.remove('active'));
-    document.querySelector(`.lang-${lang}`).classList.add('active');
+  const koBtn = document.getElementById("btn-ko");
+  const enBtn = document.getElementById("btn-en");
 
-    document.querySelectorAll('.lang-toggle button').forEach(btn => btn.classList.remove('active'));
-    document.getElementById(`btn-${lang}`).classList.add('active');
+  function toggleLang(lang) {
+    document.querySelectorAll(".lang-section").forEach(div => div.classList.remove("active"));
+    document.querySelector(".lang-" + lang).classList.add("active");
+
+    document.querySelectorAll(".lang-toggle button").forEach(btn => btn.classList.remove("active"));
+    document.getElementById("btn-" + lang).classList.add("active");
   }
 
-  // 버튼에 이벤트 연결 (정적 HTML에서는 onclick 대신 JS에서 연결이 더 안전)
-  document.getElementById("btn-ko").addEventListener("click", () => toggleLang("ko"));
-  document.getElementById("btn-en").addEventListener("click", () => toggleLang("en"));
+  koBtn.addEventListener("click", () => toggleLang("ko"));
+  enBtn.addEventListener("click", () => toggleLang("en"));
 });
 </script>
