@@ -211,13 +211,17 @@ order: 4
 </div>
 
 <script>
-function toggleLang(lang) {
-  // 모든 언어 섹션 숨김
-  document.querySelectorAll('.lang-section').forEach(div => div.classList.remove('active'));
-  document.querySelector(`.lang-${lang}`).classList.add('active');
+document.addEventListener("DOMContentLoaded", function () {
+  function toggleLang(lang) {
+    document.querySelectorAll('.lang-section').forEach(div => div.classList.remove('active'));
+    document.querySelector(`.lang-${lang}`).classList.add('active');
 
-  // 버튼 상태 갱신
-  document.querySelectorAll('.lang-toggle button').forEach(btn => btn.classList.remove('active'));
-  document.getElementById(`btn-${lang}`).classList.add('active');
-}
+    document.querySelectorAll('.lang-toggle button').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(`btn-${lang}`).classList.add('active');
+  }
+
+  // 버튼에 이벤트 연결 (정적 HTML에서는 onclick 대신 JS에서 연결이 더 안전)
+  document.getElementById("btn-ko").addEventListener("click", () => toggleLang("ko"));
+  document.getElementById("btn-en").addEventListener("click", () => toggleLang("en"));
+});
 </script>
