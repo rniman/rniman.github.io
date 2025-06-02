@@ -7,6 +7,7 @@ author: "rniman"                            # for single entry
 # or
 # authors: [<author1_id>, <author2_id>]   # for multiple entries
 description: "상속과 컴포지션에 관해 정리한 글입니다."
+peramlink: /posts/OOP_Inheritance_Composition/
 
 comments: false # 댓글 기능
 ---
