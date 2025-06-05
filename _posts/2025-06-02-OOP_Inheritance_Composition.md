@@ -1,6 +1,6 @@
 ---
 title: 객체 지향 프로그래밍 개인 메모 | 상속과 컴포지션, ECS와 컴포지션
-date: 2025-06--2 18:40:20 +0900
+date: 2025-06-02 18:40:20 +0900
 categories: [Note, Note\OOP]
 tags: [OOP, Inheritance, Composition, ECS, Design Pattern, Note]
 author: "rniman"                            # for single entry
