@@ -53,11 +53,14 @@ $$a^{(1)}_{1}$$
 
 신경망에서 신호가 어떻게 전달되는지 단계별로 살펴보자.
 
-![입력층에서 1층으로 신호 전달](image.png)
+![입력층에서 1층으로 신호 전달](assets/img/Book/Deep-Learning/Neural signal transmission process.png)
+_입력층에서 1층으로 신호 전달_
 
-![1층에서 2층으로 신호 전달](image%201.png)
+![1층에서 2층으로 신호 전달](assets/img/Book/Deep-Learning/Neural signal transmission process 1.png)
+_1층에서 2층으로 신호 전달_
 
-![2층에서 출력층으로 신호 전달](image%202.png)
+![2층에서 출력층으로 신호 전달](assets/img/Book/Deep-Learning/Neural signal transmission process 2.png)
+_2층에서 출력층으로 신호 전달_
 
 **출력층의 특징:**
 - 출력층에서는 활성화 함수로 **항등 함수**를 사용한다
