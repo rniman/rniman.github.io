@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>rniman — Graphics Programmer</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #10141c;
+    --surface2: #161b26;
+    --border: #1e2638;
+    --border-bright: #2a3550;
+    --text: #c8d4e8;
+    --text-dim: #5a6a85;
+    --text-bright: #eaf0fb;
+    --accent: #4f9eff;
+    --green: #3dd68c;
+    --purple: #a78bfa;
+    --orange: #fb923c;
+    --red: #f87171;
+    --yellow: #fbbf24;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(79,158,255,0.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,158,255,0.022) 1px, transparent 1px);
+    background-size: 52px 52px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,12,16,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 44px;
+    height: 52px;
+  }
+
+  .nav-logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-bright);
+    letter-spacing: 1px;
+  }
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* CONTAINER */
+  .container {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 0 36px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* SEC HEADER */
+  .sec-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+  .sec-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .sec-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 52px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    gap: 60px;
+    align-items: center;
+    padding: 80px 0;
+    width: 100%;
+  }
+
+  .hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeUp 0.5s 0.1s ease forwards;
+  }
+  .hero-name {
+    font-size: 52px;
+    font-weight: 700;
+    color: var(--text-bright);
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 6px;
+    opacity: 0;
+    animation: fadeUp 0.5s 0.2s ease forwards;
+  }
+  .hero-role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    color: var(--accent);
+    margin-bottom: 26px;
+    opacity: 0;
+    animation: fadeUp 0.5s 0.3s ease forwards;
+  }
+  .hero-desc {
+    font-size: 14.5px;
+    line-height: 1.9;
+    color: var(--text);
+    max-width: 520px;
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 0.5s 0.4s ease forwards;
+  }
+  .hero-desc strong { color: var(--text-bright); font-weight: 500; }
+
+  .hero-ctas {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.5s 0.5s ease forwards;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 18px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-weight: 600;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #0a0c10;
+    border: 1px solid var(--accent);
+  }
+  .btn-primary:hover { background: transparent; color: var(--accent); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border-bright);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  .school-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 14px;
+    margin-top: 20px;
+    opacity: 0;
+    animation: fadeUp 0.5s 0.6s ease forwards;
+  }
+  .school-chip span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.5px;
+  }
+
+  /* PHOTO */
+  .hero-photo-wrap {
+    opacity: 0;
+    animation: fadeUp 0.5s 0.25s ease forwards;
+  }
+  .hero-photo {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 2px solid var(--border-bright);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto;
+  }
+  .hero-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .hero-photo::before {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    border-top-color: var(--accent);
+    border-right-color: var(--accent);
+    animation: spin 4s linear infinite;
+    opacity: 0.35;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .photo-placeholder {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 8px;
+  }
+  .photo-placeholder-icon { font-size: 46px; opacity: 0.25; }
+  .photo-placeholder-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 1px;
+    color: var(--text-dim); text-transform: uppercase;
+  }
+  .photo-note {
+    margin-top: 12px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; color: var(--text-dim);
+    letter-spacing: 0.5px; line-height: 1.7;
+  }
+
+  /* SECTION WRAP */
+  .section-wrap { padding: 80px 0; }
+  .section-wrap.no-top { padding-top: 0; }
+
+  /* SKILLS */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .skill-card:hover { transform: translateY(-2px); border-color: var(--border-bright); }
+  .skill-header {
+    display: flex; align-items: center;
+    justify-content: space-between; margin-bottom: 10px;
+  }
+  .skill-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 700; color: var(--text-bright);
+  }
+  .skill-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; color: var(--text-dim);
+  }
+  .skill-bar {
+    height: 3px; background: var(--border-bright);
+    border-radius: 2px; margin-bottom: 12px; overflow: hidden;
+  }
+  .skill-fill {
+    height: 100%; border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--purple));
+  }
+  .skill-points { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .skill-points li {
+    font-size: 11px; color: var(--text-dim);
+    padding-left: 12px; position: relative; line-height: 1.5;
+  }
+  .skill-points li::before { content: '·'; position: absolute; left: 0; color: var(--accent); }
+
+  /* PROJECTS */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    text-decoration: none; display: block;
+  }
+  .project-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+  .project-card.dx12:hover  { border-color: rgba(248,113,113,0.4); }
+  .project-card.nightmare:hover { border-color: rgba(167,139,250,0.4); }
+  .project-card.shader:hover { border-color: rgba(61,214,140,0.4); }
+  .project-card.unity:hover  { border-color: rgba(251,191,36,0.4); }
+
+  .project-thumb {
+    height: 120px; display: flex;
+    align-items: center; justify-content: center; font-size: 44px;
+  }
+  .dx12-bg     { background: linear-gradient(135deg, #1a0e0e, #2a1010); }
+  .nightmare-bg { background: linear-gradient(135deg, #0e0e1a, #10102a); }
+  .shader-bg   { background: linear-gradient(135deg, #0e1a0e, #0e2a15); }
+  .unity-bg    { background: linear-gradient(135deg, #1a140a, #2a1e08); }
+
+  .project-body { padding: 16px 20px 18px; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+  .ptag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 0.5px;
+    padding: 2px 8px; border-radius: 3px;
+    background: var(--surface2); border: 1px solid var(--border-bright); color: var(--text-dim);
+  }
+  .ptag.red    { background: rgba(248,113,113,0.1); border-color: rgba(248,113,113,0.2); color: var(--red); }
+  .ptag.accent { background: rgba(79,158,255,0.1); border-color: rgba(79,158,255,0.2); color: var(--accent); }
+  .ptag.green  { background: rgba(61,214,140,0.1); border-color: rgba(61,214,140,0.2); color: var(--green); }
+  .ptag.purple { background: rgba(167,139,250,0.1); border-color: rgba(167,139,250,0.2); color: var(--purple); }
+  .ptag.yellow { background: rgba(251,191,36,0.1); border-color: rgba(251,191,36,0.2); color: var(--yellow); }
+
+  .project-title { font-size: 15px; font-weight: 700; color: var(--text-bright); margin-bottom: 6px; }
+  .project-desc  { font-size: 12px; color: var(--text-dim); line-height: 1.75; margin-bottom: 14px; }
+  .project-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 12px; border-top: 1px solid var(--border);
+  }
+  .project-link {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 1px; color: var(--accent); text-decoration: none;
+    display: flex; align-items: center; gap: 5px; transition: gap 0.2s;
+  }
+  .project-card:hover .project-link { gap: 8px; }
+  .project-period { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); }
+
+  /* LINKS */
+  .links-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .link-card {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 22px;
+    text-decoration: none; transition: transform 0.15s, border-color 0.2s;
+    flex: 1; min-width: 180px;
+  }
+  .link-card:hover { transform: translateY(-2px); }
+  .link-card.github:hover { border-color: rgba(79,158,255,0.4); }
+  .link-card.velog:hover  { border-color: rgba(61,214,140,0.4); }
+  .link-card.email:hover  { border-color: rgba(251,191,36,0.4); }
+  .link-icon { font-size: 22px; }
+  .link-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 3px;
+  }
+  .link-name { font-size: 13px; font-weight: 600; color: var(--text-bright); }
+
+  /* PLANNER FOOTER */
+  .planner-section {
+    border-top: 1px solid var(--border);
+    padding: 48px 0;
+    text-align: center;
+    position: relative; z-index: 1;
+  }
+  .planner-section-inner {
+    display: flex; align-items: center;
+    justify-content: center; gap: 20px;
+  }
+  .planner-text { font-size: 13px; color: var(--text-dim); }
+  .planner-text span { color: var(--text); }
+  .planner-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 20px; border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 1px; text-transform: uppercase;
+    text-decoration: none; color: var(--text-dim);
+    border: 1px solid var(--border-bright); transition: all 0.2s;
+  }
+  .planner-btn:hover { color: var(--accent); border-color: rgba(79,158,255,0.3); }
+  .planner-btn .arr { transition: transform 0.2s; }
+  .planner-btn:hover .arr { transform: translateX(3px); }
+
+  /* FOOTER */
+  footer {
+    padding: 22px 44px;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    position: relative; z-index: 1;
+  }
+  footer p { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-dim); }
+
+  /* REVEAL */
+  .reveal {
+    opacity: 0; transform: translateY(18px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-photo-wrap { display: none; }
+    .hero-name { font-size: 36px; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .container { padding: 0 20px; }
+    .links-row { flex-direction: column; }
+    footer { flex-direction: column; gap: 8px; text-align: center; }
+    .planner-section-inner { flex-direction: column; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">rni<span>man</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#links">Links</a></li>
+  </ul>
+</nav>
+
+<!-- HERO / ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-tag">// Game Client &amp; Graphics Programmer</div>
+        <div class="hero-name">신민근</div>
+        <div class="hero-role">Rendering · DirectX 12 · C++</div>
+        <p class="hero-desc">
+          상용 엔진에 의존하지 않고 <strong>렌더링 원리를 직접 구현</strong>하는 것을 지향합니다.<br>
+          DX12 기반 파이프라인 구성부터 ECS 아키텍처 설계까지,<br>
+          <strong>그래픽스 시스템의 동작 방식을 깊이 이해</strong>하는 것을 목표로 합니다.
+        </p>
+        <div class="hero-ctas">
+          <a href="#projects" class="btn btn-primary">프로젝트 보기 →</a>
+          <a href="https://github.com/rniman" target="_blank" class="btn btn-ghost">GitHub</a>
+          <a href="https://velog.io/@rniman/posts" target="_blank" class="btn btn-ghost">Velog</a>
+        </div>
+        <div class="school-chip">
+          <span>🎓</span>
+          <span>한국공학대학교 · 게임공학과</span>
+        </div>
+      </div>
+
+      <!-- 프로필 사진 -->
+      <div class="hero-photo-wrap">
+        <div class="hero-photo">
+          <!--
+            사진 준비되면:
+            1. assets/images/ 폴더에 profile.jpg 업로드
+            2. 아래 img 태그 주석 해제
+            3. 위 photo-placeholder div 제거
+          -->
+          <!-- <img src="assets/images/profile.jpg" alt="신민규"> -->
+          <div class="photo-placeholder">
+            <div class="photo-placeholder-icon">👤</div>
+            <div class="photo-placeholder-text">Photo</div>
+          </div>
+        </div>
+        <div class="photo-note">
+          신민근<br>rniman
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <div class="section-wrap">
+      <div class="sec-header reveal">
+        <span class="sec-label" style="color:var(--accent);">Skills</span>
+        <div class="sec-line"></div>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card reveal">
+          <div class="skill-header">
+            <span class="skill-name">C / C++</span>
+            <span class="skill-meta">5년 · 중급</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" style="width:65%"></div></div>
+          <ul class="skill-points">
+            <li>포인터/동적할당 등 메모리 동작 원리 이해</li>
+            <li>STL 컨테이너 특성 고려한 선택 활용</li>
+            <li>스마트 포인터 기반 자원 관리</li>
+            <li>OOP 기반 구조화 및 유지보수성 고려</li>
+          </ul>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-header">
+            <span class="skill-name">DirectX 12</span>
+            <span class="skill-meta">2년 · 중급</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" style="width:60%"></div></div>
+          <ul class="skill-points">
+            <li>상용 엔진 없이 DX12 API로 파이프라인 구성</li>
+            <li>리소스 배리어, 커맨드 리스트/디스크립터 힙</li>
+            <li>ECS 기반 렌더링 구조 설계</li>
+          </ul>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-header">
+            <span class="skill-name">HLSL</span>
+            <span class="skill-meta">2년 · 중급</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" style="width:55%"></div></div>
+          <ul class="skill-points">
+            <li>기본 셰이더 작성 및 DX12 파이프라인 연동</li>
+            <li>SSAO, 블룸 등 후처리 구현 경험</li>
+            <li>Lava, Ice, Portal 등 이펙트 셰이더 제작</li>
+          </ul>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-header">
+            <span class="skill-name">Git / GitHub</span>
+            <span class="skill-meta">3년 · 중급</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" style="width:60%"></div></div>
+          <ul class="skill-points">
+            <li>브랜치 운영, Merge 및 충돌 해결</li>
+            <li>규칙 기반 커밋 메시지 작성</li>
+            <li>팀 프로젝트 버전 관리 경험</li>
+          </ul>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-header">
+            <span class="skill-name">Visual Studio</span>
+            <span class="skill-meta">5년 · 중급</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" style="width:65%"></div></div>
+          <ul class="skill-points">
+            <li>솔루션/빌드 구성 관리</li>
+            <li>조사식·조건부 중단점·콜스택 디버깅</li>
+            <li>런타임 이슈 원인 추적 경험</li>
+          </ul>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-header">
+            <span class="skill-name">Unity</span>
+            <span class="skill-meta">1년 미만 · 기초</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" style="width:28%;background:linear-gradient(90deg,var(--green),var(--yellow))"></div></div>
+          <ul class="skill-points">
+            <li>씬 내 기본 카메라 움직임 구현</li>
+            <li>기초적인 C# 스크립트 작성</li>
+            <li>게임 플레이 시스템 구현 경험</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <div class="section-wrap no-top">
+      <div class="sec-header reveal">
+        <span class="sec-label" style="color:var(--purple);">Projects</span>
+        <div class="sec-line"></div>
+      </div>
+      <div class="projects-grid">
+
+        <a href="https://github.com/rniman" target="_blank" class="project-card dx12 reveal">
+          <div class="project-thumb dx12-bg">🔥</div>
+          <div class="project-body">
+            <div class="project-tags">
+              <span class="ptag red">핵심 포트폴리오</span>
+              <span class="ptag accent">DX12</span>
+              <span class="ptag">C++</span>
+              <span class="ptag">ECS</span>
+              <span class="ptag">HLSL</span>
+            </div>
+            <div class="project-title">DX12 ECS Mini Engine</div>
+            <p class="project-desc">DirectX 12 기반 렌더링 파이프라인을 상용 엔진 없이 직접 구현한 미니 엔진. ECS 아키텍처 도입으로 데이터 지향 설계를 적용하고 GPU 인스턴싱으로 대량 오브젝트 렌더링을 검증했습니다.</p>
+            <div class="project-footer">
+              <span class="project-link">GitHub <span class="arr">→</span></span>
+              <span class="project-period">2024 ~</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="https://github.com/rniman" target="_blank" class="project-card nightmare reveal">
+          <div class="project-thumb nightmare-bg">🌙</div>
+          <div class="project-body">
+            <div class="project-tags">
+              <span class="ptag purple">졸업 프로젝트</span>
+              <span class="ptag accent">DX12</span>
+              <span class="ptag">C++</span>
+              <span class="ptag">Multiplayer</span>
+            </div>
+            <div class="project-title">Nightmare Lab</div>
+            <p class="project-desc">DX12 기반 멀티플레이어 숨바꼭질 게임. 물리 시스템, 네트워크 통신, Grid 공간 분할, 애니메이션 블렌딩, SSAO·블룸 렌더링 효과를 직접 구현한 12개월 졸업 프로젝트.</p>
+            <div class="project-footer">
+              <span class="project-link">GitHub <span class="arr">→</span></span>
+              <span class="project-period">2024</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="https://github.com/rniman" target="_blank" class="project-card shader reveal">
+          <div class="project-thumb shader-bg">✨</div>
+          <div class="project-body">
+            <div class="project-tags">
+              <span class="ptag green">그래픽 감각</span>
+              <span class="ptag">HLSL</span>
+              <span class="ptag">Shader</span>
+            </div>
+            <div class="project-title">Shader / Graphics 실험</div>
+            <p class="project-desc">Lava, Ice, Portal Effect, Water Ripple, Dissolve 등 다양한 그래픽 이펙트를 HLSL로 직접 구현한 셰이더 데모 모음.</p>
+            <div class="project-footer">
+              <span class="project-link">GitHub <span class="arr">→</span></span>
+              <span class="project-period">2023 ~</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="https://github.com/rniman" target="_blank" class="project-card unity reveal">
+          <div class="project-thumb unity-bg">🎮</div>
+          <div class="project-body">
+            <div class="project-tags">
+              <span class="ptag yellow">게임 경험</span>
+              <span class="ptag">Unity</span>
+              <span class="ptag">C#</span>
+              <span class="ptag">Game Jam</span>
+            </div>
+            <div class="project-title">Unity Game Project</div>
+            <p class="project-desc">Unity 기반 게임 프로젝트 및 Game Jam 참여 결과물. 게임 플레이 시스템 구현과 빠른 프로토타이핑 경험.</p>
+            <div class="project-footer">
+              <span class="project-link">GitHub <span class="arr">→</span></span>
+              <span class="project-period">2023</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LINKS -->
+<section id="links">
+  <div class="container">
+    <div class="section-wrap no-top">
+      <div class="sec-header reveal">
+        <span class="sec-label" style="color:var(--green);">Links</span>
+        <div class="sec-line"></div>
+      </div>
+      <div class="links-row reveal">
+        <a href="https://github.com/rniman" target="_blank" class="link-card github">
+          <div class="link-icon">🐙</div>
+          <div>
+            <div class="link-label">Source Code</div>
+            <div class="link-name">github.com/rniman</div>
+          </div>
+        </a>
+        <a href="https://velog.io/@rniman/posts" target="_blank" class="link-card velog">
+          <div class="link-icon">✍️</div>
+          <div>
+            <div class="link-label">Tech Blog</div>
+            <div class="link-name">velog.io/@rniman</div>
+          </div>
+        </a>
+        <a href="mailto:shinmg00@gmail.com" class="link-card email" style="flex:1;min-width:180px;transition:transform 0.15s,border-color 0.2s;">
+          <div class="link-icon">✉️</div>
+          <div>
+            <div class="link-label">Email</div>
+            <div class="link-name">shinmg00@gmail.com</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLANNER LINK -->
+<div class="container">
+  <div class="planner-section reveal">
+    <div class="planner-section-inner">
+      <p class="planner-text"><span>취준 전략이 궁금하다면</span></p>
+      <a href="planner.html" class="planner-btn">
+        취준 플래너 보기 <span class="arr">→</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 rniman. Built with HTML &amp; 💙</p>
+  <p>rniman.github.io</p>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        const idx = Array.from(reveals).indexOf(entry.target);
+        setTimeout(() => entry.target.classList.add('visible'), (idx % 4) * 80);
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
