@@ -1,0 +1,2012 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>취업 준비 플래너</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #10141c;
+    --surface2: #161b26;
+    --border: #1e2638;
+    --border-bright: #2a3550;
+    --text: #c8d4e8;
+    --text-dim: #5a6a85;
+    --text-bright: #eaf0fb;
+    --accent: #4f9eff;
+    --accent-glow: rgba(79, 158, 255, 0.15);
+    --green: #3dd68c;
+    --green-glow: rgba(61, 214, 140, 0.12);
+    --purple: #a78bfa;
+    --purple-glow: rgba(167, 139, 250, 0.12);
+    --orange: #fb923c;
+    --orange-glow: rgba(251, 146, 60, 0.12);
+    --pink: #f472b6;
+    --pink-glow: rgba(244, 114, 182, 0.12);
+    --red: #f87171;
+    --yellow: #fbbf24;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(79,158,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,158,255,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 32px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .header {
+    margin-bottom: 64px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .header-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0.8;
+  }
+
+  .header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--text-bright);
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+  }
+
+  .header h1 span {
+    color: var(--accent);
+  }
+
+  .mission-card {
+    margin-top: 24px;
+    background: var(--accent-glow);
+    border: 1px solid rgba(79,158,255,0.2);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 18px 22px;
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--text);
+  }
+
+  .mission-card strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Section */
+  section {
+    margin-bottom: 52px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  section:nth-child(2) { animation-delay: 0.05s; }
+  section:nth-child(3) { animation-delay: 0.10s; }
+  section:nth-child(4) { animation-delay: 0.15s; }
+  section:nth-child(5) { animation-delay: 0.20s; }
+  section:nth-child(6) { animation-delay: 0.25s; }
+  section:nth-child(7) { animation-delay: 0.30s; }
+  section:nth-child(8) { animation-delay: 0.35s; }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .section-title::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.5;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .title-purple { color: var(--purple); }
+  .title-green  { color: var(--green); }
+  .title-yellow { color: var(--yellow); }
+  .title-orange { color: var(--orange); }
+  .title-pink   { color: var(--pink); }
+  .title-blue   { color: var(--accent); }
+  .title-gray   { color: var(--text-dim); }
+
+  /* Project Cards */
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .project-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .project-card.main:hover { border-color: rgba(248,113,113,0.4); }
+  .project-card.sub:hover  { border-color: rgba(61,214,140,0.4); }
+  .project-card.shader:hover { border-color: rgba(167,139,250,0.4); }
+
+  .card-header {
+    padding: 16px 20px 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card-icon {
+    font-size: 20px;
+    line-height: 1;
+    margin-top: 2px;
+  }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+  }
+
+  .card-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+
+  .badge-red    { background: rgba(248,113,113,0.15); color: var(--red); border: 1px solid rgba(248,113,113,0.25); }
+  .badge-green  { background: rgba(61,214,140,0.12); color: var(--green); border: 1px solid rgba(61,214,140,0.22); }
+  .badge-purple { background: rgba(167,139,250,0.12); color: var(--purple); border: 1px solid rgba(167,139,250,0.22); }
+
+  .card-body {
+    padding: 14px 20px 18px;
+  }
+
+  /* Feature rows */
+  .feature-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+
+  .feature-row:last-child { border-bottom: none; }
+
+  .feature-key {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    min-width: 130px;
+    flex-shrink: 0;
+  }
+
+  .feature-val {
+    color: var(--text);
+    font-size: 12.5px;
+  }
+
+  /* Dot list */
+  .dot-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .dot-list li {
+    font-size: 13px;
+    padding: 5px 0;
+    padding-left: 16px;
+    position: relative;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dot-list li:last-child { border-bottom: none; }
+
+  .dot-list li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  /* Output tags */
+  .output-line {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .output-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 3px;
+    background: var(--surface2);
+    border: 1px solid var(--border-bright);
+    color: var(--text);
+  }
+
+  /* Learning Pillars */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .pillar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s, border-color 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pillar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .pillar.orange::before { background: var(--orange); }
+  .pillar.blue::before   { background: var(--accent); }
+  .pillar.green2::before { background: var(--green); }
+
+  .pillar:hover { transform: translateY(-3px); }
+  .pillar.orange:hover { border-color: rgba(251,146,60,0.35); }
+  .pillar.blue:hover   { border-color: rgba(79,158,255,0.35); }
+  .pillar.green2:hover { border-color: rgba(61,214,140,0.35); }
+
+  .pillar-icon { font-size: 26px; margin-bottom: 10px; }
+
+  .pillar-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 8px;
+  }
+
+  .pillar-items {
+    font-size: 11.5px;
+    color: var(--text-dim);
+    line-height: 1.9;
+  }
+
+  /* Activities */
+  .activities {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .activity-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    transition: transform 0.2s;
+  }
+
+  .activity-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(251,191,36,0.3);
+  }
+
+  .activity-icon { font-size: 20px; margin-bottom: 10px; }
+
+  .activity-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--yellow);
+    margin-bottom: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  .activity-items {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.9;
+  }
+
+  /* Schedule Table */
+  .schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .schedule-table th {
+    background: var(--surface2);
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    text-align: left;
+    font-weight: 400;
+    border-bottom: 2px solid var(--border-bright);
+  }
+
+  .schedule-table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+
+  .schedule-table tr:last-child td { border-bottom: none; }
+
+  .schedule-table tr:hover td {
+    background: rgba(255,255,255,0.015);
+  }
+
+  .time-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .dot-accent {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  .dot-sun { background: var(--yellow); }
+  .dot-sky { background: var(--accent); }
+  .dot-moon { background: var(--purple); }
+
+  .note-text {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* Principles */
+  .principles {
+    display: grid;
+    gap: 10px;
+  }
+
+  .principle-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .principle-item:hover {
+    border-color: rgba(244,114,182,0.3);
+    background: rgba(244,114,182,0.02);
+  }
+
+  .principle-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--pink);
+    font-weight: 700;
+    min-width: 24px;
+    padding-top: 1px;
+  }
+
+  .principle-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 3px;
+  }
+
+  .principle-desc {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* Portfolio Grid */
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .portfolio-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    transition: transform 0.15s, border-color 0.2s;
+  }
+
+  .portfolio-item:hover {
+    transform: translateY(-1px);
+    border-color: var(--border-bright);
+  }
+
+  .portfolio-emoji { font-size: 22px; margin-top: 1px; }
+
+  .portfolio-cat {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+
+  .portfolio-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+  }
+
+  .portfolio-outputs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  /* Self Care */
+  .self-care {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .care-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+
+  .care-item:hover { transform: translateY(-2px); border-color: var(--border-bright); }
+
+  .care-icon { font-size: 22px; margin-bottom: 8px; }
+  .care-title { font-size: 12px; font-weight: 700; color: var(--text-bright); margin-bottom: 6px; }
+  .care-desc { font-size: 11.5px; color: var(--text-dim); line-height: 1.7; }
+
+  /* Core axes callout */
+  .axes-callout {
+    background: linear-gradient(135deg, rgba(79,158,255,0.06), rgba(167,139,250,0.06));
+    border: 1px solid rgba(79,158,255,0.2);
+    border-radius: 12px;
+    padding: 28px 32px;
+    text-align: center;
+  }
+
+  .axes-callout .axes-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .axes-callout .axes-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 16px;
+  }
+
+  .axes-items {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .axis-chip {
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .axis-chip.dx  { background: rgba(248,113,113,0.12); border: 1px solid rgba(248,113,113,0.25); color: var(--red); }
+  .axis-chip.unity { background: rgba(61,214,140,0.1); border: 1px solid rgba(61,214,140,0.22); color: var(--green); }
+  .axis-chip.shader { background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.22); color: var(--purple); }
+
+  .axes-note {
+    margin-top: 14px;
+    font-size: 12.5px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 48px 0;
+  }
+
+  /* ── Weekly Timetable ── */
+  .timetable-wrap {
+    overflow-x: auto;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  .timetable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+    min-width: 720px;
+  }
+
+  .timetable thead th {
+    background: var(--surface2);
+    padding: 10px 12px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    border-bottom: 2px solid var(--border-bright);
+    white-space: nowrap;
+  }
+
+  .timetable thead th:first-child {
+    text-align: left;
+    width: 120px;
+    color: var(--text-dim);
+  }
+
+  .timetable thead th.col-mon { color: var(--accent); }
+  .timetable thead th.col-tue { color: var(--accent); }
+  .timetable thead th.col-wed { color: var(--accent); }
+  .timetable thead th.col-thu { color: var(--green); }
+  .timetable thead th.col-fri { color: var(--yellow); }
+  .timetable thead th.col-sat { color: var(--yellow); }
+
+  .timetable tbody td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    vertical-align: middle;
+    line-height: 1.5;
+  }
+
+  .timetable tbody td:last-child { border-right: none; }
+
+  .timetable tbody tr:last-child td { border-bottom: none; }
+
+  .timetable tbody tr:hover td { background: rgba(255,255,255,0.015); }
+
+  .tt-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+
+  .tt-fixed {
+    color: var(--text-dim);
+    font-size: 11px;
+    font-style: italic;
+  }
+
+  .tt-break {
+    background: rgba(255,255,255,0.02);
+    color: var(--text-dim);
+    font-size: 11px;
+    text-align: center;
+  }
+
+  .tt-thu {
+    background: rgba(61,214,140,0.04);
+    color: var(--green);
+    font-weight: 500;
+  }
+
+  /* Weekly rhythm bar */
+  .rhythm-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .rhythm-day {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 10px;
+    text-align: center;
+  }
+
+  .rhythm-day.thu {
+    border-color: rgba(61,214,140,0.3);
+    background: rgba(61,214,140,0.04);
+  }
+
+  .rhythm-day.sun {
+    border-color: rgba(167,139,250,0.2);
+    background: rgba(167,139,250,0.03);
+  }
+
+  .rhythm-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .rhythm-day.thu .rhythm-label { color: var(--green); }
+  .rhythm-day.sun .rhythm-label { color: var(--purple); }
+
+  .rhythm-bar-wrap {
+    height: 48px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .rhythm-bar {
+    width: 16px;
+    border-radius: 3px 3px 0 0;
+    transition: height 0.3s;
+  }
+
+  .rhythm-intensity {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 6px;
+  }
+
+  /* ── 3-month Roadmap ── */
+  .roadmap-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .roadmap-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .roadmap-card-header {
+    padding: 14px 18px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .roadmap-month {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .roadmap-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 8px;
+  }
+
+  .ratio-bar {
+    height: 5px;
+    border-radius: 3px;
+    background: var(--border-bright);
+    overflow: hidden;
+    margin-top: 6px;
+  }
+
+  .ratio-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--purple));
+  }
+
+  .ratio-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+  }
+
+  .roadmap-card-body {
+    padding: 14px 18px;
+  }
+
+  .roadmap-block {
+    margin-bottom: 12px;
+  }
+
+  .roadmap-block:last-child { margin-bottom: 0; }
+
+  .roadmap-block-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .roadmap-items {
+    list-style: none;
+  }
+
+  .roadmap-items li {
+    font-size: 11.5px;
+    color: var(--text);
+    padding: 3px 0 3px 14px;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.5;
+  }
+
+  .roadmap-items li:last-child { border-bottom: none; }
+
+  .roadmap-items li::before {
+    content: '·';
+    position: absolute;
+    left: 2px;
+    color: var(--text-dim);
+  }
+
+  /* ── Emergency Manual ── */
+  .emergency-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .emergency-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .emergency-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .emergency-header .e-icon { font-size: 16px; }
+
+  .emergency-header .e-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-bright);
+  }
+
+  .emergency-body { padding: 12px 16px; }
+
+  .e-phase {
+    margin-bottom: 10px;
+  }
+
+  .e-phase:last-child { margin-bottom: 0; }
+
+  .e-phase-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    display: inline-block;
+  }
+
+  .label-red   { background: rgba(248,113,113,0.12); color: var(--red); }
+  .label-yellow{ background: rgba(251,191,36,0.12); color: var(--yellow); }
+  .label-green { background: rgba(61,214,140,0.12); color: var(--green); }
+  .label-blue  { background: rgba(79,158,255,0.12); color: var(--accent); }
+
+  .e-items {
+    list-style: none;
+  }
+
+  .e-items li {
+    font-size: 11px;
+    color: var(--text);
+    padding: 2.5px 0 2.5px 12px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .e-items li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--text-dim);
+  }
+
+  /* ── Burnout Prevention ── */
+  .rule333 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .rule-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+    border-top: 2px solid var(--pink);
+  }
+
+  .rule-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--pink);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .rule-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+  }
+
+  .rule-desc {
+    font-size: 11.5px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .burnout-tips {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .burnout-tip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .burnout-tip strong {
+    display: block;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  /* ── Tips ── */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .tip-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+  }
+
+  .tip-icon { font-size: 20px; margin-bottom: 10px; }
+
+  .tip-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 8px;
+  }
+
+  .tip-body {
+    font-size: 11.5px;
+    color: var(--text);
+    line-height: 1.75;
+  }
+
+  .tip-effect {
+    margin-top: 10px;
+    padding: 7px 10px;
+    background: var(--surface2);
+    border-radius: 5px;
+    border-left: 2px solid var(--green);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--green);
+  }
+
+  .code-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text);
+    line-height: 1.9;
+    margin-top: 8px;
+  }
+
+  .code-block .c-dir { color: var(--yellow); }
+  .code-block .c-file { color: var(--accent); }
+  .code-block .c-comment { color: var(--text-dim); }
+
+  /* final quote */
+  .final-quote {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .quote-mark {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 48px;
+    color: var(--border-bright);
+    line-height: 0.8;
+    flex-shrink: 0;
+  }
+
+  .quote-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-bright);
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  .advice-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .advice-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 12.5px;
+    color: var(--text);
+    line-height: 1.6;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .advice-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  /* ── Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .pillars, .activities, .self-care { grid-template-columns: 1fr; }
+    .portfolio-grid { grid-template-columns: 1fr; }
+    .project-grid { grid-template-columns: 1fr; }
+    .container { padding: 40px 20px 60px; }
+    .header h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-label">// 취업 준비 플래너</div>
+    <h1>게임 클라이언트 &amp; <span>그래픽스 프로그래머</span></h1>
+    <div class="mission-card">
+      <strong>그래픽스 프로그래밍 역량</strong> · <strong>게임 엔진 구조 이해</strong> · <strong>실제 게임 개발 경험</strong> · <strong>CS 기본기</strong> · <strong>문제 해결 능력</strong>을 균형 있게 준비한다.
+    </div>
+  </div>
+
+  <!-- Current Status Dashboard -->
+  <div style="margin-bottom:52px;animation:fadeUp 0.6s 0.05s ease both;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--green);margin-bottom:16px;display:flex;align-items:center;gap:10px;">
+      <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite;"></span>
+      현재 상태
+      <span style="flex:1;height:1px;background:var(--border);display:block;"></span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px;">
+      <!-- 진행 월차 -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;border-top:2px solid var(--accent);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">진행 월차</div>
+        <div style="font-size:28px;font-weight:700;color:var(--accent);font-family:'JetBrains Mono',monospace;line-height:1;">1<span style="font-size:13px;color:var(--text-dim);"> / 3</span></div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:6px;">기초 다지기</div>
+      </div>
+      <!-- 이번 주 -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;border-top:2px solid var(--purple);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">이번 주</div>
+        <div style="font-size:14px;font-weight:700;color:var(--text-bright);line-height:1.4;">Week 1</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:6px;">루틴 정착 중</div>
+      </div>
+      <!-- 메인 프로젝트 -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;border-top:2px solid var(--red);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">메인 프로젝트</div>
+        <div style="font-size:13px;font-weight:700;color:var(--text-bright);line-height:1.4;">DX12 ECS 엔진</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:6px;">Phong Shading 구현 중</div>
+      </div>
+      <!-- 오늘 집중 -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;border-top:2px solid var(--green);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">오늘 집중</div>
+        <div style="font-size:13px;font-weight:700;color:var(--text-bright);line-height:1.4;">엔진 학습</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:6px;">렌더링 파이프라인</div>
+      </div>
+    </div>
+
+    <!-- 전체 진행도 바 -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--text-dim);">3개월 전체 진행도</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);">~8%</span>
+      </div>
+      <div style="height:6px;background:var(--border-bright);border-radius:3px;overflow:hidden;">
+        <div style="width:8%;height:100%;background:linear-gradient(90deg,var(--accent),var(--purple));border-radius:3px;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);">Month 1 — 기초</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);">Month 2 — 포트폴리오</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);">Month 3 — 지원</span>
+      </div>
+    </div>
+
+    <div style="margin-top:10px;padding:10px 14px;background:rgba(79,158,255,0.05);border:1px dashed rgba(79,158,255,0.2);border-radius:8px;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--text-dim);">// 수동 업데이트 필드 — 매주 월요일 현재 상태 반영</span>
+    </div>
+  </div>
+
+  <style>
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+  </style>
+
+  <!-- Core Projects -->
+  <section>
+    <div class="section-title title-purple">핵심 개발 프로젝트</div>
+
+    <div class="project-grid">
+      <!-- DX12 Engine -->
+      <div class="project-card main">
+        <div class="card-header">
+          <div class="card-icon">🔥</div>
+          <div>
+            <div class="card-title">DX12 ECS 미니 엔진</div>
+            <div class="card-sub" style="margin-bottom:6px;">MAIN PROJECT</div>
+            <span class="badge badge-red">핵심 포트폴리오</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="feature-row">
+            <div class="feature-key">DX12 Renderer</div>
+            <div class="feature-val">DirectX 12 기반 렌더링 파이프라인</div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-key">ECS 시스템</div>
+            <div class="feature-val">Entity-Component-System 아키텍처</div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-key">Phong Lighting</div>
+            <div class="feature-val">Phong 조명 모델 적용</div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-key">Texture 지원</div>
+            <div class="feature-val">텍스처 로딩 및 매핑</div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-key">Instancing</div>
+            <div class="feature-val">GPU 인스턴싱 대량 오브젝트 렌더링</div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-key">Stress Test</div>
+            <div class="feature-val">성능 검증용 데모</div>
+          </div>
+          <div class="output-line">
+            <span class="output-label">산출물</span>
+            <span class="tag">Mini Engine</span>
+            <span class="tag">Stress Test Demo</span>
+            <span class="tag">구조 문서</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <!-- Unity -->
+        <div class="project-card sub">
+          <div class="card-header">
+            <div class="card-icon">🎮</div>
+            <div>
+              <div class="card-title">Unity 프로젝트</div>
+              <div class="card-sub" style="margin-bottom:6px;">SUB PROJECT</div>
+              <span class="badge badge-green">게임 경험</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <ul class="dot-list">
+              <li>Unity 기반 게임 프로젝트 개발</li>
+              <li>Game Jam 참여</li>
+            </ul>
+            <div class="output-line">
+              <span class="output-label">산출물</span>
+              <span class="tag">Unity Game</span>
+              <span class="tag">Jam 결과물</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shader -->
+        <div class="project-card shader">
+          <div class="card-header">
+            <div class="card-icon">✨</div>
+            <div>
+              <div class="card-title">Shader / Graphics 실험</div>
+              <div class="card-sub" style="margin-bottom:6px;">GRAPHICS SENSE</div>
+              <span class="badge badge-purple">그래픽 감각</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <span class="tag">Lava Shader</span>
+              <span class="tag">Ice Shader</span>
+              <span class="tag">Portal Effect</span>
+              <span class="tag">Water Ripple</span>
+              <span class="tag">Dissolve Effect</span>
+            </div>
+            <div class="output-line">
+              <span class="output-label">산출물</span>
+              <span class="tag">Shader Demo</span>
+              <span class="tag">이펙트 포트폴리오</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Learning -->
+  <section>
+    <div class="section-title title-green">학습 영역</div>
+    <div class="pillars">
+      <div class="pillar orange">
+        <div class="pillar-icon">🧩</div>
+        <div class="pillar-title">알고리즘</div>
+        <div class="pillar-items">매일 LeetCode 1~2 문제<br>백준 / 프로그래머스 병행</div>
+      </div>
+      <div class="pillar blue">
+        <div class="pillar-icon">💻</div>
+        <div class="pillar-title">CS 기본기</div>
+        <div class="pillar-items">운영체제 · 네트워크<br>메모리 관리 · 멀티스레딩</div>
+      </div>
+      <div class="pillar green2">
+        <div class="pillar-icon">📚</div>
+        <div class="pillar-title">직무 지식</div>
+        <div class="pillar-items">C++ · 게임 수학<br>그래픽스 · 렌더링 파이프라인</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Activities -->
+  <section>
+    <div class="section-title title-yellow">취업 준비 활동</div>
+    <div class="activities">
+      <div class="activity-card">
+        <div class="activity-icon">🔍</div>
+        <div class="activity-title">공고 탐색</div>
+        <div class="activity-items">채용 공고 모니터링<br>관심 기업 분석</div>
+      </div>
+      <div class="activity-card">
+        <div class="activity-icon">📝</div>
+        <div class="activity-title">지원서 작성</div>
+        <div class="activity-items">이력서 · 자소서 작성<br>포트폴리오 정리</div>
+      </div>
+      <div class="activity-card">
+        <div class="activity-icon">🎤</div>
+        <div class="activity-title">면접 준비</div>
+        <div class="activity-items">기술 질문 정리<br>포트폴리오 설명 준비<br>모의 면접</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Schedule -->
+  <section>
+    <div class="section-title title-orange">시간 운영 구조</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1.5px;color:var(--text-dim);text-transform:uppercase;margin-bottom:10px;">일일 루틴</div>
+        <table class="schedule-table">
+          <thead>
+            <tr>
+              <th>시간대</th>
+              <th>주요 활동</th>
+              <th>비고</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="time-label"><span class="dot-accent dot-sun"></span>오전</td>
+              <td>엔진 학습 · 포트폴리오</td>
+              <td class="note-text">집중력 최고</td>
+            </tr>
+            <tr>
+              <td class="time-label"><span class="dot-accent dot-sky"></span>오후</td>
+              <td>포트폴리오 · CS 학습</td>
+              <td class="note-text">깊은 구현 및 이론</td>
+            </tr>
+            <tr>
+              <td class="time-label"><span class="dot-accent dot-moon"></span>저녁</td>
+              <td>코딩 테스트 · 취준</td>
+              <td class="note-text">가벼운 준비</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1.5px;color:var(--text-dim);text-transform:uppercase;margin-bottom:10px;">주간 루틴</div>
+        <table class="schedule-table">
+          <thead>
+            <tr>
+              <th>요일</th>
+              <th>활동</th>
+              <th>목적</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="time-label" style="color:var(--accent);">월 ~ 수</td>
+              <td>집중 학습</td>
+              <td class="note-text">핵심 개발 진행</td>
+            </tr>
+            <tr>
+              <td class="time-label" style="color:var(--green);">목</td>
+              <td>회복 및 복습</td>
+              <td class="note-text">정리, 페이스 조절</td>
+            </tr>
+            <tr>
+              <td class="time-label" style="color:var(--yellow);">금 ~ 토</td>
+              <td>마무리 학습</td>
+              <td class="note-text">주간 목표 달성</td>
+            </tr>
+            <tr>
+              <td class="time-label" style="color:var(--text-dim);">일</td>
+              <td>완전 휴식</td>
+              <td class="note-text">재충전</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Principles -->
+  <section>
+    <div class="section-title title-pink">학습 및 개발 원칙</div>
+    <div class="principles">
+      <div class="principle-item">
+        <span class="principle-num">01</span>
+        <div>
+          <div class="principle-title">직접 만들어보는 학습</div>
+          <div class="principle-desc">새로운 개념을 배우면 반드시 직접 구현한다</div>
+        </div>
+      </div>
+      <div class="principle-item">
+        <span class="principle-num">02</span>
+        <div>
+          <div class="principle-title">완벽한 준비를 기다리지 않기</div>
+          <div class="principle-desc">프로젝트를 통해 학습하고, 결과물을 통해 자신감을 확보한다</div>
+        </div>
+      </div>
+      <div class="principle-item">
+        <span class="principle-num">03</span>
+        <div>
+          <div class="principle-title">지속 가능한 학습</div>
+          <div class="principle-desc">매일 프로그래밍하되, 무리하지 않는 속도를 유지한다</div>
+        </div>
+      </div>
+      <div class="principle-item">
+        <span class="principle-num">04</span>
+        <div>
+          <div class="principle-title">체크리스트 중심 학습 지양</div>
+          <div class="principle-desc">결과물 중심, 프로젝트 중심으로 학습한다</div>
+        </div>
+      </div>
+      <div class="principle-item">
+        <span class="principle-num">05</span>
+        <div>
+          <div class="principle-title">명확한 마감 기한 설정</div>
+          <div class="principle-desc">프로젝트별, 학습 목표별 기간을 설정한다</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio -->
+  <section>
+    <div class="section-title title-blue">최종 포트폴리오 구성</div>
+    <div class="portfolio-grid">
+      <div class="portfolio-item">
+        <div class="portfolio-emoji">🔧</div>
+        <div>
+          <div class="portfolio-cat">엔진</div>
+          <div class="portfolio-name">DX12 ECS Mini Engine</div>
+          <div class="portfolio-outputs">
+            <span class="tag">Rendering System</span>
+            <span class="tag">Stress Test Demo</span>
+          </div>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <div class="portfolio-emoji">🎮</div>
+        <div>
+          <div class="portfolio-cat">게임</div>
+          <div class="portfolio-name">Unity Game Project</div>
+          <div class="portfolio-outputs">
+            <span class="tag">게임 프로젝트</span>
+            <span class="tag">Game Jam 결과물</span>
+          </div>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <div class="portfolio-emoji">✨</div>
+        <div>
+          <div class="portfolio-cat">그래픽</div>
+          <div class="portfolio-name">Shader Demo</div>
+          <div class="portfolio-outputs">
+            <span class="tag">Graphics Effect 포트폴리오</span>
+          </div>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <div class="portfolio-emoji">📄</div>
+        <div>
+          <div class="portfolio-cat">문서</div>
+          <div class="portfolio-name">기술 문서</div>
+          <div class="portfolio-outputs">
+            <span class="tag">Engine Architecture</span>
+            <span class="tag">Graphics API 정리</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Self Care -->
+  <section>
+    <div class="section-title title-gray">자기 관리</div>
+    <div class="self-care">
+      <div class="care-item">
+        <div class="care-icon">💪</div>
+        <div class="care-title">건강 관리</div>
+        <div class="care-desc">운동 · 산책 · 휴식</div>
+      </div>
+      <div class="care-item">
+        <div class="care-icon">📖</div>
+        <div class="care-title">자기 개발</div>
+        <div class="care-desc">영어 회화 학원</div>
+      </div>
+      <div class="care-item">
+        <div class="care-icon">📜</div>
+        <div class="care-title">자격증</div>
+        <div class="care-desc">컴퓨터 활용 능력<br>정보처리기사</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3-Month Roadmap -->
+  <section>
+    <div class="section-title title-blue">3개월 로드맵</div>
+
+    <!-- Monthly ratio table -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:16px;">
+      <table class="schedule-table" style="font-size:13px;">
+        <thead>
+          <tr>
+            <th>기간</th>
+            <th>학습</th>
+            <th>취준 활동</th>
+            <th>주요 목표</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);">1개월차</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="flex:1;height:6px;background:var(--border-bright);border-radius:3px;overflow:hidden;">
+                  <div style="width:80%;height:100%;background:var(--accent);border-radius:3px;"></div>
+                </div>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);">80%</span>
+              </div>
+            </td>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="flex:1;height:6px;background:var(--border-bright);border-radius:3px;overflow:hidden;">
+                  <div style="width:20%;height:100%;background:var(--green);border-radius:3px;"></div>
+                </div>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);">20%</span>
+              </div>
+            </td>
+            <td class="note-text">기초 다지기 + 루틴 정착</td>
+          </tr>
+          <tr>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--yellow);">2개월차</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="flex:1;height:6px;background:var(--border-bright);border-radius:3px;overflow:hidden;">
+                  <div style="width:65%;height:100%;background:var(--accent);border-radius:3px;"></div>
+                </div>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);">65%</span>
+              </div>
+            </td>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="flex:1;height:6px;background:var(--border-bright);border-radius:3px;overflow:hidden;">
+                  <div style="width:35%;height:100%;background:var(--green);border-radius:3px;"></div>
+                </div>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);">35%</span>
+              </div>
+            </td>
+            <td class="note-text">포트폴리오 완성 + 실제 지원</td>
+          </tr>
+          <tr>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--orange);">3개월차</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="flex:1;height:6px;background:var(--border-bright);border-radius:3px;overflow:hidden;">
+                  <div style="width:50%;height:100%;background:var(--accent);border-radius:3px;"></div>
+                </div>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);">50%</span>
+              </div>
+            </td>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="flex:1;height:6px;background:var(--border-bright);border-radius:3px;overflow:hidden;">
+                  <div style="width:50%;height:100%;background:var(--green);border-radius:3px;"></div>
+                </div>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);">50%</span>
+              </div>
+            </td>
+            <td class="note-text">본격 지원 + 면접 준비</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="roadmap-grid">
+      <!-- Month 1 -->
+      <div class="roadmap-card">
+        <div class="roadmap-card-header">
+          <div class="roadmap-month" style="color:var(--accent);">Month 01</div>
+          <div class="roadmap-title">기초 다지기</div>
+          <div style="font-size:11px;color:var(--text-dim);">학습 80% / 취준 20%</div>
+        </div>
+        <div class="roadmap-card-body">
+          <div class="roadmap-block">
+            <div class="roadmap-block-title" style="color:var(--accent);">학습 목표</div>
+            <ul class="roadmap-items">
+              <li>엔진 기본 개념 완성 (렌더링 파이프라인, 물리, 입력)</li>
+              <li>포트폴리오 프로토타입 구현</li>
+              <li>CS 기본 — OS 프로세스/스레드, 네트워크 TCP/UDP</li>
+              <li>코테 실버~골드 난이도 기본 알고리즘</li>
+            </ul>
+          </div>
+          <div class="roadmap-block">
+            <div class="roadmap-block-title" style="color:var(--green);">취준 활동</div>
+            <ul class="roadmap-items">
+              <li>매주 월요일 공고 10개 읽기 (요구사항 분석)</li>
+              <li>금요일 기술 블로그 1개 작성</li>
+              <li>관심 기업 5곳 리스트업</li>
+              <li>이력서 초안 작성</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Month 2 -->
+      <div class="roadmap-card">
+        <div class="roadmap-card-header">
+          <div class="roadmap-month" style="color:var(--yellow);">Month 02</div>
+          <div class="roadmap-title">포트폴리오 집중</div>
+          <div style="font-size:11px;color:var(--text-dim);">학습 65% / 취준 35%</div>
+        </div>
+        <div class="roadmap-card-body">
+          <div class="roadmap-block">
+            <div class="roadmap-block-title" style="color:var(--accent);">학습 목표</div>
+            <ul class="roadmap-items">
+              <li>엔진은 필요한 부분만 학습</li>
+              <li>포트폴리오 핵심 기능 80% 완성</li>
+              <li>CS 심화 — 동기화, HTTP/HTTPS, 메모리 관리</li>
+              <li>코테 골드~플래티넘 난이도</li>
+            </ul>
+          </div>
+          <div class="roadmap-block">
+            <div class="roadmap-block-title" style="color:var(--green);">취준 활동</div>
+            <ul class="roadmap-items">
+              <li>주 2~3곳 지원서 작성</li>
+              <li>코딩테스트 응시 (월 2~4회)</li>
+              <li>기술 블로그 주 1회</li>
+              <li>포트폴리오 피드백 받기</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Month 3 -->
+      <div class="roadmap-card">
+        <div class="roadmap-card-header">
+          <div class="roadmap-month" style="color:var(--orange);">Month 03</div>
+          <div class="roadmap-title">본격 지원</div>
+          <div style="font-size:11px;color:var(--text-dim);">학습 50% / 취준 50%</div>
+        </div>
+        <div class="roadmap-card-body">
+          <div class="roadmap-block">
+            <div class="roadmap-block-title" style="color:var(--accent);">학습 목표</div>
+            <ul class="roadmap-items">
+              <li>신규 학습 중단, 복습 집중</li>
+              <li>포트폴리오 최종 마무리</li>
+              <li>면접 대비 — 기술 질문, 포트폴리오 발표</li>
+            </ul>
+          </div>
+          <div class="roadmap-block">
+            <div class="roadmap-block-title" style="color:var(--green);">취준 활동</div>
+            <ul class="roadmap-items">
+              <li>매일 공고 체크</li>
+              <li>주 3~5곳 적극 지원</li>
+              <li>면접 예정 시 최우선 대응</li>
+              <li>네트워킹 (컨퍼런스, 밋업)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+    <!-- Weekly Timetable -->
+  <section>
+    <div class="section-title title-orange">주간 시간표</div>
+
+    <!-- Rhythm Bars -->
+    <div class="rhythm-row" style="margin-bottom:18px;">
+      <div class="rhythm-day">
+        <div class="rhythm-label" style="color:var(--accent);">MON</div>
+        <div class="rhythm-bar-wrap"><div class="rhythm-bar" style="height:42px;background:var(--accent);opacity:0.8;"></div></div>
+        <div class="rhythm-intensity">80~90%</div>
+      </div>
+      <div class="rhythm-day">
+        <div class="rhythm-label" style="color:var(--accent);">TUE</div>
+        <div class="rhythm-bar-wrap"><div class="rhythm-bar" style="height:42px;background:var(--accent);opacity:0.8;"></div></div>
+        <div class="rhythm-intensity">80~90%</div>
+      </div>
+      <div class="rhythm-day">
+        <div class="rhythm-label" style="color:var(--accent);">WED</div>
+        <div class="rhythm-bar-wrap"><div class="rhythm-bar" style="height:42px;background:var(--accent);opacity:0.8;"></div></div>
+        <div class="rhythm-intensity">80~90%</div>
+      </div>
+      <div class="rhythm-day thu">
+        <div class="rhythm-label">THU 🌿</div>
+        <div class="rhythm-bar-wrap"><div class="rhythm-bar" style="height:22px;background:var(--green);opacity:0.8;"></div></div>
+        <div class="rhythm-intensity">50% 회복</div>
+      </div>
+      <div class="rhythm-day">
+        <div class="rhythm-label" style="color:var(--yellow);">FRI</div>
+        <div class="rhythm-bar-wrap"><div class="rhythm-bar" style="height:32px;background:var(--yellow);opacity:0.75;"></div></div>
+        <div class="rhythm-intensity">60~70%</div>
+      </div>
+      <div class="rhythm-day">
+        <div class="rhythm-label" style="color:var(--yellow);">SAT</div>
+        <div class="rhythm-bar-wrap"><div class="rhythm-bar" style="height:32px;background:var(--yellow);opacity:0.75;"></div></div>
+        <div class="rhythm-intensity">60~70%</div>
+      </div>
+      <div class="rhythm-day sun">
+        <div class="rhythm-label">SUN 🏝</div>
+        <div class="rhythm-bar-wrap"><div class="rhythm-bar" style="height:4px;background:var(--purple);opacity:0.5;"></div></div>
+        <div class="rhythm-intensity">완전 휴식</div>
+      </div>
+    </div>
+
+    <div class="timetable-wrap">
+      <table class="timetable">
+        <thead>
+          <tr>
+            <th>시간</th>
+            <th class="col-mon">월요일</th>
+            <th class="col-tue">화요일</th>
+            <th class="col-wed">수요일</th>
+            <th class="col-thu">목요일 🌿</th>
+            <th class="col-fri">금요일</th>
+            <th class="col-sat">토요일</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tt-time">09:20–09:40</td>
+            <td colspan="6" class="tt-fixed" style="text-align:center;">데일리 To-do 리스트 작성 &amp; 공고 체크</td>
+          </tr>
+          <tr>
+            <td class="tt-time">09:40–12:30</td>
+            <td>주간 계획 &amp; 엔진 학습</td>
+            <td>엔진 심화 학습</td>
+            <td>포트폴리오 개발</td>
+            <td class="tt-thu">주간 복습</td>
+            <td>CS 이론 학습</td>
+            <td>자율 학습 / 보충</td>
+          </tr>
+          <tr>
+            <td class="tt-time">12:30–13:30</td>
+            <td colspan="6" class="tt-break">🍚 점심 식사 &amp; 휴식</td>
+          </tr>
+          <tr>
+            <td class="tt-time">13:30–16:00</td>
+            <td>엔진 실습 (토이 프로젝트)</td>
+            <td>포트폴리오 개발</td>
+            <td>포트폴리오 개발</td>
+            <td class="tt-thu">자유 / 보충</td>
+            <td>코드 리팩토링</td>
+            <td>못다한 학습 / 프로젝트</td>
+          </tr>
+          <tr>
+            <td class="tt-time">16:00–16:15</td>
+            <td colspan="6" class="tt-break">☕ 휴식</td>
+          </tr>
+          <tr>
+            <td class="tt-time">16:15–17:30</td>
+            <td style="color:var(--purple);">코테 1문제</td>
+            <td style="color:var(--purple);">코테 1문제</td>
+            <td style="color:var(--purple);">코테 1문제</td>
+            <td style="color:var(--purple);" class="tt-thu">코테 1문제</td>
+            <td style="color:var(--purple);">코테 1문제</td>
+            <td style="color:var(--purple);">코테 1문제</td>
+          </tr>
+          <tr>
+            <td class="tt-time">17:30–18:30</td>
+            <td colspan="6" class="tt-break">🚶 산책 / 운동</td>
+          </tr>
+          <tr>
+            <td class="tt-time">18:30–19:30</td>
+            <td colspan="6" class="tt-break">🍽 저녁 식사 &amp; 휴식</td>
+          </tr>
+          <tr>
+            <td class="tt-time">19:30–20:30</td>
+            <td>포트폴리오 개발</td>
+            <td>엔진 실습</td>
+            <td>엔진 학습</td>
+            <td class="tt-thu">자유 / 보충</td>
+            <td>포트폴리오 개발</td>
+            <td>자율 학습 / 보충</td>
+          </tr>
+          <tr>
+            <td class="tt-time">20:30–21:30</td>
+            <td>공고 서칭</td>
+            <td>지원서 작성</td>
+            <td>기업 분석</td>
+            <td class="tt-thu">면접 준비</td>
+            <td style="color:var(--yellow);">주간 회고 &amp; 블로그</td>
+            <td>다음 주 계획 수립</td>
+          </tr>
+          <tr>
+            <td class="tt-time">21:30~</td>
+            <td colspan="6" class="tt-break">🌙 자유 시간</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Emergency Manual -->
+  <section>
+    <div class="section-title title-red" style="color:var(--red);">긴급 상황 대응</div>
+    <div class="emergency-grid">
+      <!-- Situation 1 -->
+      <div class="emergency-card">
+        <div class="emergency-header">
+          <span class="e-icon">🎯</span>
+          <span class="e-title">관심 기업 공고 발견</span>
+        </div>
+        <div class="emergency-body">
+          <div class="e-phase">
+            <span class="e-phase-label label-green">D-7일 이상</span>
+            <ul class="e-items" style="margin-top:6px;">
+              <li>당일 공고 분석 (2시간)</li>
+              <li>익일부터 저녁 학습 → 지원서 전환</li>
+              <li>주말 하루 투입해서 완성</li>
+            </ul>
+          </div>
+          <div class="e-phase">
+            <span class="e-phase-label label-red">D-3일 이내</span>
+            <ul class="e-items" style="margin-top:6px;">
+              <li>모든 학습 중단</li>
+              <li>풀타임 지원서 작성 (6~8시간)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Situation 2 -->
+      <div class="emergency-card">
+        <div class="emergency-header">
+          <span class="e-icon">🎤</span>
+          <span class="e-title">면접 확정</span>
+        </div>
+        <div class="emergency-body">
+          <div class="e-phase">
+            <span class="e-phase-label label-yellow">D-5 ~ D-1</span>
+            <ul class="e-items" style="margin-top:6px;">
+              <li>신규 학습 완전 중단</li>
+              <li>오전 3h: 기술 면접 준비</li>
+              <li>오후 3h: 기업 리서치 + 예상 질문</li>
+              <li>저녁 2h: 모의 면접</li>
+              <li>포트폴리오 실행 영상, 발표 자료 필수 준비</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Situation 3 -->
+      <div class="emergency-card">
+        <div class="emergency-header">
+          <span class="e-icon">⚡</span>
+          <span class="e-title">해커톤 / 공모전</span>
+        </div>
+        <div class="emergency-body">
+          <div class="e-phase">
+            <span class="e-phase-label label-blue">2주 전</span>
+            <ul class="e-items" style="margin-top:6px;">
+              <li>평일 저녁 2h: 팀 미팅 / 사전 준비</li>
+              <li>주말 하루: 기획 / 역할 분담</li>
+            </ul>
+          </div>
+          <div class="e-phase">
+            <span class="e-phase-label label-yellow">진행 중</span>
+            <ul class="e-items" style="margin-top:6px;">
+              <li>2~3일 완전 몰입</li>
+              <li>다음 주는 버퍼 주로 자동 전환</li>
+              <li>학습 강도 50% 감축</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Burnout Prevention -->
+  <section>
+    <div class="section-title title-pink">번아웃 방지 전략</div>
+    <div class="rule333">
+      <div class="rule-item">
+        <div class="rule-num">3h</div>
+        <div class="rule-title">집중 단위</div>
+        <div class="rule-desc">3시간 집중 후<br>30분 휴식</div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num">3d</div>
+        <div class="rule-title">고강도 주기</div>
+        <div class="rule-desc">3일 고강도 후<br>1일 저강도 (목요일)</div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num">3w</div>
+        <div class="rule-title">버퍼 주기</div>
+        <div class="rule-desc">3주 진행 후<br>1주 회복 (버퍼 주)</div>
+      </div>
+    </div>
+    <div class="burnout-tips">
+      <div class="burnout-tip">
+        <strong>80% 원칙</strong>
+        80% 이해하면 다음으로 넘어가기<br>하루 계획의 70% 달성이면 성공
+      </div>
+      <div class="burnout-tip">
+        <strong>목요일 법칙</strong>
+        목요일은 죄책감 없이 쉬기<br>외출하고 취미 즐기기
+      </div>
+      <div class="burnout-tip">
+        <strong>여유 허용</strong>
+        한 달에 3~4일은 망쳐도 괜찮음<br>슬럼프는 예정된 것
+      </div>
+    </div>
+  </section>
+
+  <!-- Time-saving Tips -->
+  <section>
+    <div class="section-title title-green">시간 절약 팁</div>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-icon">📁</div>
+        <div class="tip-title">지원서 템플릿화</div>
+        <div class="tip-body">지원서 폴더 구조를 만들어 매번 처음부터 작성하지 않도록 합니다.</div>
+        <div class="code-block">
+          <span class="c-dir">📁 지원서_베이스폴더/</span><br>
+          &nbsp;&nbsp;<span class="c-file">├─ 이력서_v3.2.pdf</span> <span class="c-comment">(매주 업데이트)</span><br>
+          &nbsp;&nbsp;<span class="c-file">├─ 자소서_기본템플릿.docx</span><br>
+          &nbsp;&nbsp;<span class="c-comment">&nbsp;&nbsp;&nbsp;&nbsp;├─ [동기] 공통</span><br>
+          &nbsp;&nbsp;<span class="c-comment">&nbsp;&nbsp;&nbsp;&nbsp;├─ [강점] 공통</span><br>
+          &nbsp;&nbsp;<span class="c-comment">&nbsp;&nbsp;&nbsp;&nbsp;└─ [지원이유] 커스텀</span><br>
+          &nbsp;&nbsp;<span class="c-file">└─ 포트폴리오_요약본.pdf</span>
+        </div>
+        <div class="tip-effect">⚡ 지원서 작성 4h → 1.5h</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🔔</div>
+        <div class="tip-title">공고 자동 알림 설정</div>
+        <div class="tip-body">
+          원티드 관심 기업 "구독" 설정<br>
+          잡코리아 키워드 알림 (게임 클라이언트, Unreal 등)<br>
+          텔레그램 봇 주요 채용 공고 자동 수집
+        </div>
+        <div class="tip-effect">⚡ 매일 서칭 30분 → 주 1회 10분</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🗂</div>
+        <div class="tip-title">면접 예상 질문 DB</div>
+        <div class="tip-body">
+          Notion 데이터베이스로 관리:<br>
+          기술 질문 (OS, 네트워크, 알고리즘)<br>
+          포트폴리오 질문 (왜 이렇게 구현했나요?)<br>
+          인성 질문 (협업 경험, 갈등 해결)
+        </div>
+        <div class="tip-effect">📈 매주 5개씩 → 3개월 후 60개 확보</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final Advice -->
+  <section>
+    <div class="section-title title-purple">마지막 조언</div>
+    <div class="final-quote">
+      <div class="quote-mark">"</div>
+      <div class="quote-text">3개월 풀로 달리는 사람보다,<br>2개월 꾸준히 달린 사람이 더 멀리 갑니다.</div>
+    </div>
+    <div class="advice-grid">
+      <div class="advice-item"><span class="advice-dot"></span>첫 2주는 계획의 70%만 달성을 목표로 몸 길들이기</div>
+      <div class="advice-item"><span class="advice-dot"></span>목요일은 진짜 쉬기 — 외출하고 취미 즐기기</div>
+      <div class="advice-item"><span class="advice-dot"></span>매주 금요일 20:30–21:30은 무조건 취준 활동</div>
+      <div class="advice-item"><span class="advice-dot"></span>슬럼프는 예정된 것, 버퍼 주를 적극 활용</div>
+    </div>
+
+    <div style="margin-top:16px;background:linear-gradient(135deg,rgba(248,113,113,0.06),rgba(251,146,60,0.06));border:1px solid rgba(248,113,113,0.18);border-radius:10px;padding:20px 24px;text-align:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--red);margin-bottom:8px;">🔥 시작 전 다짐</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8;">이 플래너는 완벽하게 지키는 것이 목표가 아닙니다.<br>3개월 후 <strong style="color:var(--text-bright);">"꾸준히 했다"</strong>는 자신감을 얻는 것이 진짜 목표입니다.</div>
+      <div style="margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:1px;">월~수 집중 → 목 회복 → 금~토 마무리 → 일 휴식</div>
+    </div>
+  </section>
+
+  <!-- Core Axes -->
+  <div class="axes-callout">
+    <div class="axes-label">💡 핵심 3축</div>
+    <div class="axes-title">이 세 축만 흔들리지 않으면 취준 전략이 안정적으로 유지된다</div>
+    <div class="axes-items">
+      <div class="axis-chip dx">🔥 DX12 Engine</div>
+      <div class="axis-chip unity">🎮 Unity Project</div>
+      <div class="axis-chip shader">✨ Shader Experiments</div>
+    </div>
+    <div class="axes-note">핵심 포트폴리오 · 게임 경험 · 그래픽 감각</div>
+  </div>
+
+</div>
+</body>
+</html>
