@@ -1756,7 +1756,7 @@
         <tbody>
           <tr>
             <td class="tt-time">09:20–09:40</td>
-            <td colspan="6" class="tt-fixed" style="text-align:center;">데일리 To-do 리스트 작성 &amp; 공고 체크</td>
+            <td colspan="6" class="tt-fixed" style="text-align:center;">오늘 목표 설정 &amp; 공고 확인</td>
           </tr>
           <tr>
             <td class="tt-time">09:40–12:30</td>
@@ -2017,5 +2017,112 @@
   </div>
 
 </div>
+
+<script>
+(function() {
+  // 요일 → 열 인덱스 (1=월, 2=화, 3=수, 4=목, 5=금, 6=토, 0=일)
+  const dayMap = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6 };
+
+  // 시간표 시간 구간 정의 (분 단위)
+  const slots = [
+    { start:  9*60+20, end:  9*60+40 },
+    { start:  9*60+40, end: 12*60+30 },
+    { start: 12*60+30, end: 13*60+30 },
+    { start: 13*60+30, end: 16*60+0  },
+    { start: 16*60+0,  end: 16*60+15 },
+    { start: 16*60+15, end: 17*60+30 },
+    { start: 17*60+30, end: 18*60+30 },
+    { start: 18*60+30, end: 19*60+30 },
+    { start: 19*60+30, end: 20*60+30 },
+    { start: 20*60+30, end: 21*60+30 },
+    { start: 21*60+30, end: 24*60+0  },
+  ];
+
+  function highlight() {
+    const now = new Date();
+    const day = now.getDay();       // 0=일, 1=월 ... 6=토
+    const mins = now.getHours() * 60 + now.getMinutes();
+    const colIdx = dayMap[day];     // 일요일은 undefined → 미표시
+
+    const table = document.querySelector('.timetable');
+    if (!table) return;
+    const rows = table.querySelectorAll('tbody tr');
+
+    // 기존 하이라이트 초기화
+    table.querySelectorAll('td.now-row').forEach(td => {
+      td.classList.remove('now-row');
+      td.style.removeProperty('background');
+      td.style.removeProperty('border-left');
+    });
+    table.querySelectorAll('td.now-cell').forEach(td => {
+      td.classList.remove('now-cell');
+      td.style.removeProperty('background');
+      td.style.removeProperty('border-left');
+      td.style.removeProperty('color');
+      td.style.removeProperty('font-weight');
+    });
+
+    // 현재 시간 구간 찾기
+    let slotIdx = -1;
+    for (let i = 0; i < slots.length; i++) {
+      if (mins >= slots[i].start && mins < slots[i].end) {
+        slotIdx = i;
+        break;
+      }
+    }
+    if (slotIdx === -1) return;
+
+    const row = rows[slotIdx];
+    if (!row) return;
+    const cells = row.querySelectorAll('td');
+
+    // 행 전체 옅게 표시
+    cells.forEach(td => {
+      td.classList.add('now-row');
+      td.style.background = 'rgba(79,158,255,0.04)';
+    });
+
+    // 해당 요일 셀 강조 (일요일이거나 colspan 행이면 건너뜀)
+    if (colIdx !== undefined) {
+      const isColspanRow = cells.length <= 2; // 휴식 등 colspan 행
+      if (!isColspanRow && cells[colIdx]) {
+        const cell = cells[colIdx];
+        cell.classList.add('now-cell');
+        cell.style.background = 'rgba(79,158,255,0.14)';
+        cell.style.borderLeft = '2px solid var(--accent)';
+        cell.style.color = 'var(--text-bright)';
+        cell.style.fontWeight = '500';
+      }
+    }
+
+    // 현재 시간 표시 배지 (시간표 상단)
+    const wrap = document.querySelector('.timetable-wrap');
+    let badge = document.getElementById('now-badge');
+    if (!badge) {
+      badge = document.createElement('div');
+      badge.id = 'now-badge';
+      badge.style.cssText = `
+        display:inline-flex;align-items:center;gap:8px;
+        margin-bottom:10px;
+        font-family:'JetBrains Mono',monospace;font-size:10px;
+        letter-spacing:1px;color:var(--accent);
+      `;
+      wrap.parentNode.insertBefore(badge, wrap);
+    }
+    const dayNames = ['일','월','화','수','목','금','토'];
+    const h = now.getHours().toString().padStart(2,'0');
+    const m = now.getMinutes().toString().padStart(2,'0');
+    badge.innerHTML = `
+      <span style="display:inline-block;width:6px;height:6px;border-radius:50%;
+        background:var(--accent);box-shadow:0 0 6px var(--accent);
+        animation:pulse 2s infinite;"></span>
+      현재 ${dayNames[day]}요일 ${h}:${m}
+    `;
+  }
+
+  highlight();
+  setInterval(highlight, 60 * 1000); // 1분마다 갱신
+})();
+</script>
 </body>
 </html>
