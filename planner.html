@@ -1097,7 +1097,24 @@
     margin-top: 6px;
   }
 
-  /* ── Animations */
+  /* Activity type tags in timetable */
+  tt-type {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.5px;
+    padding: 1px 6px;
+    border-radius: 2px;
+    margin-bottom: 4px;
+    margin-right: 2px;
+    font-weight: 600;
+  }
+  tt-type.t-impl { background: rgba(248,113,113,0.12); border: 1px solid rgba(248,113,113,0.22); color: var(--red); }
+  tt-type.t-plan { background: rgba(79,158,255,0.1);  border: 1px solid rgba(79,158,255,0.2);  color: var(--accent); }
+  tt-type.t-doc  { background: rgba(61,214,140,0.1);  border: 1px solid rgba(61,214,140,0.2);  color: var(--green); }
+  tt-type.t-note { background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.2); color: var(--purple); }
+
+  .timetable tbody td { line-height: 1.6; }
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -1147,7 +1164,7 @@
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;border-top:2px solid var(--accent);">
         <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">진행 월차</div>
         <div style="font-size:28px;font-weight:700;color:var(--accent);font-family:'JetBrains Mono',monospace;line-height:1;">1<span style="font-size:13px;color:var(--text-dim);"> / 3</span></div>
-        <div style="font-size:11px;color:var(--text-dim);margin-top:6px;">기초 다지기</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:6px;">기반 구축</div>
       </div>
       <!-- 이번 주 -->
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;border-top:2px solid var(--purple);">
@@ -1173,15 +1190,15 @@
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 20px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
         <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--text-dim);">3개월 전체 진행도</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);">~8%</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);">~1%</span>
       </div>
       <div style="height:6px;background:var(--border-bright);border-radius:3px;overflow:hidden;">
-        <div style="width:8%;height:100%;background:linear-gradient(90deg,var(--accent),var(--purple));border-radius:3px;"></div>
+        <div style="width:1%;height:100%;background:linear-gradient(90deg,var(--accent),var(--purple));border-radius:3px;"></div>
       </div>
       <div style="display:flex;justify-content:space-between;margin-top:8px;">
-        <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);">Month 1 — 기초</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);">Month 2 — 포트폴리오</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);">Month 3 — 지원</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);">Month 1 — 기반 구축</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);">Month 2 — 기능 완성</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);">Month 3 — 마무리</span>
       </div>
     </div>
 
@@ -1246,7 +1263,45 @@
         </div>
       </div>
 
-      <div style="display:flex;flex-direction:column;gap:14px;">
+      <!-- Nightmare Lab -->
+      <div class="project-card" style="border-color:rgba(167,139,250,0.25);">
+        <div class="card-header">
+          <div class="card-icon">🌙</div>
+          <div>
+            <div class="card-title">Nightmare Lab</div>
+            <div class="card-sub" style="margin-bottom:6px;">GRADUATION PROJECT</div>
+            <span class="badge badge-purple">졸업 프로젝트</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="feature-row">
+            <div class="feature-key">Network</div>
+            <div class="feature-val">멀티플레이어 숨바꼭질 (WSAAsyncSelect)</div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-key">Physics</div>
+            <div class="feature-val">물리 시스템 직접 구현</div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-key">Spatial</div>
+            <div class="feature-val">Grid 기반 공간 분할</div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-key">Animation</div>
+            <div class="feature-val">애니메이션 블렌딩</div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-key">Rendering</div>
+            <div class="feature-val">SSAO · 블룸 · Bayer 디더링</div>
+          </div>
+          <div class="output-line">
+            <span class="output-label">1개월차</span>
+            <span class="tag">리팩토링</span>
+            <span class="tag">코드 정리</span>
+            <span class="tag">문서화</span>
+          </div>
+        </div>
+      </div>
         <!-- Unity -->
         <div class="project-card sub">
           <div class="card-header">
@@ -1328,7 +1383,7 @@
       <div class="activity-card">
         <div class="activity-icon">🔍</div>
         <div class="activity-title">공고 탐색</div>
-        <div class="activity-items">채용 공고 모니터링<br>관심 기업 분석</div>
+        <div class="activity-items">채용 공고 모니터링<br>관심 공고 탐방</div>
       </div>
       <div class="activity-card">
         <div class="activity-icon">📝</div>
@@ -1360,18 +1415,18 @@
           <tbody>
             <tr>
               <td class="time-label"><span class="dot-accent dot-sun"></span>오전</td>
-              <td>엔진 학습 · 포트폴리오</td>
-              <td class="note-text">집중력 최고</td>
+              <td>코테 · 공고 탐방</td>
+              <td class="note-text">집중력 활용 + 취준 병행</td>
             </tr>
             <tr>
               <td class="time-label"><span class="dot-accent dot-sky"></span>오후</td>
-              <td>포트폴리오 · CS 학습</td>
+              <td>개발 · CS 학습</td>
               <td class="note-text">깊은 구현 및 이론</td>
             </tr>
             <tr>
               <td class="time-label"><span class="dot-accent dot-moon"></span>저녁</td>
-              <td>코딩 테스트 · 취준</td>
-              <td class="note-text">가벼운 준비</td>
+              <td>개발 · 미흡 사항 보충</td>
+              <td class="note-text">이어서 or 정리</td>
             </tr>
           </tbody>
         </table>
@@ -1471,6 +1526,17 @@
         </div>
       </div>
       <div class="portfolio-item">
+        <div class="portfolio-emoji">🌙</div>
+        <div>
+          <div class="portfolio-cat">게임</div>
+          <div class="portfolio-name">Nightmare Lab</div>
+          <div class="portfolio-outputs">
+            <span class="tag">멀티플레이어</span>
+            <span class="tag">졸업 프로젝트</span>
+          </div>
+        </div>
+      </div>
+      <div class="portfolio-item">
         <div class="portfolio-emoji">🎮</div>
         <div>
           <div class="portfolio-cat">게임</div>
@@ -1561,47 +1627,47 @@
                 <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);">20%</span>
               </div>
             </td>
-            <td class="note-text">기초 다지기 + 루틴 정착</td>
+            <td class="note-text">루틴 정착 + 공고 모니터링</td>
           </tr>
           <tr>
             <td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--yellow);">2개월차</td>
             <td>
               <div style="display:flex;align-items:center;gap:8px;">
                 <div style="flex:1;height:6px;background:var(--border-bright);border-radius:3px;overflow:hidden;">
-                  <div style="width:65%;height:100%;background:var(--accent);border-radius:3px;"></div>
+                  <div style="width:80%;height:100%;background:var(--accent);border-radius:3px;"></div>
                 </div>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);">65%</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);">80%</span>
               </div>
             </td>
             <td>
               <div style="display:flex;align-items:center;gap:8px;">
                 <div style="flex:1;height:6px;background:var(--border-bright);border-radius:3px;overflow:hidden;">
-                  <div style="width:35%;height:100%;background:var(--green);border-radius:3px;"></div>
+                  <div style="width:20%;height:100%;background:var(--green);border-radius:3px;"></div>
                 </div>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);">35%</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);">20%</span>
               </div>
             </td>
-            <td class="note-text">포트폴리오 완성 + 실제 지원</td>
+            <td class="note-text">포트폴리오 완성 + 기회 지원</td>
           </tr>
           <tr>
             <td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--orange);">3개월차</td>
             <td>
               <div style="display:flex;align-items:center;gap:8px;">
                 <div style="flex:1;height:6px;background:var(--border-bright);border-radius:3px;overflow:hidden;">
-                  <div style="width:50%;height:100%;background:var(--accent);border-radius:3px;"></div>
+                  <div style="width:80%;height:100%;background:var(--accent);border-radius:3px;"></div>
                 </div>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);">50%</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);">80%</span>
               </div>
             </td>
             <td>
               <div style="display:flex;align-items:center;gap:8px;">
                 <div style="flex:1;height:6px;background:var(--border-bright);border-radius:3px;overflow:hidden;">
-                  <div style="width:50%;height:100%;background:var(--green);border-radius:3px;"></div>
+                  <div style="width:20%;height:100%;background:var(--green);border-radius:3px;"></div>
                 </div>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);">50%</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);">20%</span>
               </div>
             </td>
-            <td class="note-text">본격 지원 + 면접 준비</td>
+            <td class="note-text">면접 준비 + 적극 지원</td>
           </tr>
         </tbody>
       </table>
@@ -1612,26 +1678,28 @@
       <div class="roadmap-card">
         <div class="roadmap-card-header">
           <div class="roadmap-month" style="color:var(--accent);">Month 01</div>
-          <div class="roadmap-title">기초 다지기</div>
-          <div style="font-size:11px;color:var(--text-dim);">학습 80% / 취준 20%</div>
+          <div class="roadmap-title">기반 구축</div>
+          <div style="font-size:11px;color:var(--text-dim);">학습 80% / 취준 대응 20%</div>
         </div>
         <div class="roadmap-card-body">
           <div class="roadmap-block">
             <div class="roadmap-block-title" style="color:var(--accent);">학습 목표</div>
             <ul class="roadmap-items">
-              <li>엔진 기본 개념 완성 (렌더링 파이프라인, 물리, 입력)</li>
-              <li>포트폴리오 프로토타입 구현</li>
-              <li>CS 기본 — OS 프로세스/스레드, 네트워크 TCP/UDP</li>
-              <li>코테 실버~골드 난이도 기본 알고리즘</li>
+              <li>Nightmare Lab 리팩토링 · 정리 · 문서화</li>
+              <li>MiniEngine 학습 · 코드 정리 · 문서화</li>
+              <li>LeetCode Study 플랜 1문제 / 일</li>
+              <li>CS 학습 (DailyCS · 인강)</li>
+              <li>Unity Jam 참여 · 학습</li>
+              <li>Shader Demo 구현 · 정리</li>
             </ul>
           </div>
           <div class="roadmap-block">
             <div class="roadmap-block-title" style="color:var(--green);">취준 활동</div>
             <ul class="roadmap-items">
-              <li>매주 월요일 공고 10개 읽기 (요구사항 분석)</li>
-              <li>금요일 기술 블로그 1개 작성</li>
-              <li>관심 기업 5곳 리스트업</li>
-              <li>이력서 초안 작성</li>
+              <li>공고 탐색 · 관심 기업 리스트업</li>
+              <li>이력서 · 자기소개서 작성</li>
+              <li>포트폴리오 사이트 · PPT 정리</li>
+              <li>공고 나오면 바로 지원</li>
             </ul>
           </div>
         </div>
@@ -1641,26 +1709,26 @@
       <div class="roadmap-card">
         <div class="roadmap-card-header">
           <div class="roadmap-month" style="color:var(--yellow);">Month 02</div>
-          <div class="roadmap-title">포트폴리오 집중</div>
-          <div style="font-size:11px;color:var(--text-dim);">학습 65% / 취준 35%</div>
+          <div class="roadmap-title">기능 완성</div>
+          <div style="font-size:11px;color:var(--text-dim);">학습 80% / 취준 대응 20%</div>
         </div>
         <div class="roadmap-card-body">
           <div class="roadmap-block">
             <div class="roadmap-block-title" style="color:var(--accent);">학습 목표</div>
             <ul class="roadmap-items">
-              <li>엔진은 필요한 부분만 학습</li>
-              <li>포트폴리오 핵심 기능 80% 완성</li>
-              <li>CS 심화 — 동기화, HTTP/HTTPS, 메모리 관리</li>
-              <li>코테 골드~플래티넘 난이도</li>
+              <li>Mini Engine 정리 · 추가 구현 (여유되면)</li>
+              <li>LeetCode Study 플랜 1문제 / 일</li>
+              <li>CS 학습 (DailyCS · 인강)</li>
+              <li>Unity Jam 참여 · 학습</li>
+              <li>Shader Demo 지속 관리 · 보완</li>
             </ul>
           </div>
           <div class="roadmap-block">
             <div class="roadmap-block-title" style="color:var(--green);">취준 활동</div>
             <ul class="roadmap-items">
-              <li>주 2~3곳 지원서 작성</li>
-              <li>코딩테스트 응시 (월 2~4회)</li>
-              <li>기술 블로그 주 1회</li>
-              <li>포트폴리오 피드백 받기</li>
+              <li>공고 탐색 · 꾸준히 지원</li>
+              <li>이력서 · 자기소개서 업데이트</li>
+              <li>포트폴리오 사이트 · PPT 정리</li>
             </ul>
           </div>
         </div>
@@ -1670,25 +1738,27 @@
       <div class="roadmap-card">
         <div class="roadmap-card-header">
           <div class="roadmap-month" style="color:var(--orange);">Month 03</div>
-          <div class="roadmap-title">본격 지원</div>
-          <div style="font-size:11px;color:var(--text-dim);">학습 50% / 취준 50%</div>
+          <div class="roadmap-title">마무리</div>
+          <div style="font-size:11px;color:var(--text-dim);">학습 80% / 취준 대응 20%</div>
         </div>
         <div class="roadmap-card-body">
           <div class="roadmap-block">
             <div class="roadmap-block-title" style="color:var(--accent);">학습 목표</div>
             <ul class="roadmap-items">
-              <li>신규 학습 중단, 복습 집중</li>
-              <li>포트폴리오 최종 마무리</li>
-              <li>면접 대비 — 기술 질문, 포트폴리오 발표</li>
+              <li>Mini Engine 정리 · 추가 구현 (여유되면)</li>
+              <li>LeetCode Study 플랜 1문제 / 일</li>
+              <li>CS 학습 (DailyCS · 인강)</li>
+              <li>Unity Jam 참여 · 학습</li>
+              <li>Shader Demo 마무리 · 문서화</li>
             </ul>
           </div>
           <div class="roadmap-block">
             <div class="roadmap-block-title" style="color:var(--green);">취준 활동</div>
             <ul class="roadmap-items">
-              <li>매일 공고 체크</li>
-              <li>주 3~5곳 적극 지원</li>
-              <li>면접 예정 시 최우선 대응</li>
-              <li>네트워킹 (컨퍼런스, 밋업)</li>
+              <li>공고 탐색 · 꾸준히 지원</li>
+              <li>이력서 · 자기소개서 업데이트</li>
+              <li>포트폴리오 사이트 · PPT 최종 정리</li>
+              <li>면접 예정 시 학습 비중 조정</li>
             </ul>
           </div>
         </div>
@@ -1759,12 +1829,17 @@
             <td colspan="6" class="tt-fixed" style="text-align:center;">오늘 목표 설정 &amp; 공고 확인</td>
           </tr>
           <tr>
-            <td class="tt-time">09:40–12:30</td>
-            <td>주간 계획 &amp; 엔진 학습</td>
-            <td>엔진 심화 학습</td>
-            <td>포트폴리오 개발</td>
+            <td class="tt-time">09:40–10:30</td>
+            <td colspan="5" style="color:var(--purple);text-align:center;font-weight:500;">🧩 코테 1문제</td>
+            <td style="color:var(--text-dim);text-align:center;">자유</td>
+          </tr>
+          <tr>
+            <td class="tt-time">10:30–12:30</td>
+            <td>주간 목표 &amp; 개발</td>
+            <td>개발</td>
+            <td>개발</td>
             <td class="tt-thu">주간 복습</td>
-            <td>CS 이론 학습</td>
+            <td>개발</td>
             <td>자율 학습 / 보충</td>
           </tr>
           <tr>
@@ -1773,11 +1848,11 @@
           </tr>
           <tr>
             <td class="tt-time">13:30–16:00</td>
-            <td>엔진 실습 (토이 프로젝트)</td>
-            <td>포트폴리오 개발</td>
-            <td>포트폴리오 개발</td>
+            <td>개발</td>
+            <td>개발</td>
+            <td>개발</td>
             <td class="tt-thu">자유 / 보충</td>
-            <td>코드 리팩토링</td>
+            <td>개발</td>
             <td>못다한 학습 / 프로젝트</td>
           </tr>
           <tr>
@@ -1785,38 +1860,38 @@
             <td colspan="6" class="tt-break">☕ 휴식</td>
           </tr>
           <tr>
-            <td class="tt-time">16:15–17:30</td>
-            <td style="color:var(--purple);">코테 1문제</td>
-            <td style="color:var(--purple);">코테 1문제</td>
-            <td style="color:var(--purple);">코테 1문제</td>
-            <td style="color:var(--purple);" class="tt-thu">코테 1문제</td>
-            <td style="color:var(--purple);">코테 1문제</td>
-            <td style="color:var(--purple);">코테 1문제</td>
+            <td class="tt-time">16:15–17:00</td>
+            <td style="color:var(--green);">CS 학습</td>
+            <td style="color:var(--green);">CS 학습</td>
+            <td style="color:var(--green);">CS 학습</td>
+            <td class="tt-thu" style="color:var(--green);">CS 복습</td>
+            <td style="color:var(--green);">CS 학습</td>
+            <td style="color:var(--green);">CS 학습</td>
           </tr>
           <tr>
-            <td class="tt-time">17:30–18:30</td>
+            <td class="tt-time">17:00–18:00</td>
             <td colspan="6" class="tt-break">🚶 산책 / 운동</td>
           </tr>
           <tr>
-            <td class="tt-time">18:30–19:30</td>
+            <td class="tt-time">18:00–19:00</td>
             <td colspan="6" class="tt-break">🍽 저녁 식사 &amp; 휴식</td>
           </tr>
           <tr>
-            <td class="tt-time">19:30–20:30</td>
-            <td>포트폴리오 개발</td>
-            <td>엔진 실습</td>
-            <td>엔진 학습</td>
+            <td class="tt-time">19:00–20:30</td>
+            <td>개발 · 보충</td>
+            <td>개발 · 보충</td>
+            <td>개발 · 보충</td>
             <td class="tt-thu">자유 / 보충</td>
-            <td>포트폴리오 개발</td>
+            <td>개발 · 보충</td>
             <td>자율 학습 / 보충</td>
           </tr>
           <tr>
-            <td class="tt-time">20:30–21:30</td>
-            <td>공고 서칭</td>
-            <td>지원서 작성</td>
-            <td>기업 분석</td>
-            <td class="tt-thu">면접 준비</td>
-            <td style="color:var(--yellow);">주간 회고 &amp; 블로그</td>
+            <td class="tt-time">20:30–21:00</td>
+            <td>공고 탐방</td>
+            <td>공고 탐방</td>
+            <td>공고 탐방</td>
+            <td class="tt-thu">공고 탐방</td>
+            <td style="color:var(--yellow);">개발 · 보충</td>
             <td>다음 주 계획 수립</td>
           </tr>
           <tr>
@@ -1825,6 +1900,22 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <!-- 월차별 저녁 취준 비중 안내 -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;">
+      <div style="background:var(--surface);border:1px solid rgba(79,158,255,0.2);border-radius:8px;padding:12px 16px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--accent);margin-bottom:6px;">MONTH 1</div>
+        <div style="font-size:12px;color:var(--text);">저녁 취준 최소화<br><span style="color:var(--text-dim);font-size:11px;">공고 탐방 + 블로그 위주</span></div>
+      </div>
+      <div style="background:var(--surface);border:1px solid rgba(251,191,36,0.2);border-radius:8px;padding:12px 16px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--yellow);margin-bottom:6px;">MONTH 2</div>
+        <div style="font-size:12px;color:var(--text);">지원서 작성 추가<br><span style="color:var(--text-dim);font-size:11px;">화요일 취준 본격 시작</span></div>
+      </div>
+      <div style="background:var(--surface);border:1px solid rgba(251,146,60,0.2);border-radius:8px;padding:12px 16px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--orange);margin-bottom:6px;">MONTH 3</div>
+        <div style="font-size:12px;color:var(--text);">면접 준비 전면 투입<br><span style="color:var(--text-dim);font-size:11px;">목요일 면접 준비 추가</span></div>
+      </div>
     </div>
   </section>
 
@@ -1993,7 +2084,6 @@
     <div class="advice-grid">
       <div class="advice-item"><span class="advice-dot"></span>첫 2주는 계획의 70%만 달성을 목표로 몸 길들이기</div>
       <div class="advice-item"><span class="advice-dot"></span>목요일은 진짜 쉬기 — 외출하고 취미 즐기기</div>
-      <div class="advice-item"><span class="advice-dot"></span>매주 금요일 20:30–21:30은 무조건 취준 활동</div>
       <div class="advice-item"><span class="advice-dot"></span>슬럼프는 예정된 것, 버퍼 주를 적극 활용</div>
     </div>
 
@@ -2004,17 +2094,6 @@
     </div>
   </section>
 
-  <!-- Core Axes -->
-  <div class="axes-callout">
-    <div class="axes-label">💡 핵심 3축</div>
-    <div class="axes-title">이 세 축만 흔들리지 않으면 취준 전략이 안정적으로 유지된다</div>
-    <div class="axes-items">
-      <div class="axis-chip dx">🔥 DX12 Engine</div>
-      <div class="axis-chip unity">🎮 Unity Project</div>
-      <div class="axis-chip shader">✨ Shader Experiments</div>
-    </div>
-    <div class="axes-note">핵심 포트폴리오 · 게임 경험 · 그래픽 감각</div>
-  </div>
 
 </div>
 
@@ -2026,14 +2105,15 @@
   // 시간표 시간 구간 정의 (분 단위)
   const slots = [
     { start:  9*60+20, end:  9*60+40 },
-    { start:  9*60+40, end: 12*60+30 },
+    { start:  9*60+40, end: 10*60+30 },
+    { start: 10*60+30, end: 12*60+30 },
     { start: 12*60+30, end: 13*60+30 },
     { start: 13*60+30, end: 16*60+0  },
     { start: 16*60+0,  end: 16*60+15 },
-    { start: 16*60+15, end: 17*60+30 },
-    { start: 17*60+30, end: 18*60+30 },
-    { start: 18*60+30, end: 19*60+30 },
-    { start: 19*60+30, end: 20*60+30 },
+    { start: 16*60+15, end: 17*60+0  },
+    { start: 17*60+0,  end: 18*60+0  },
+    { start: 18*60+0,  end: 19*60+0  },
+    { start: 19*60+0,  end: 20*60+30 },
     { start: 20*60+30, end: 21*60+30 },
     { start: 21*60+30, end: 24*60+0  },
   ];
