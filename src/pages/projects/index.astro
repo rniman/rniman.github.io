@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import MiniProjects from '../../components/MiniProjects.astro';
+import { projects } from '../../data/projects';
+const featuredProjects = ['nightmare-lab', 'rniman-engine']
+  .map(slug => projects.find(project => project.slug === slug)!)
+  .filter(Boolean);
+---
+<Base title="Projects" description="게임과 렌더링 엔진, Python으로 만든 작은 프로젝트를 소개합니다.">
+  <header class="page-heading"><p class="eyebrow">GAMES / ENGINES / PROJECTS</p><h1>생각을 구현하는 일.</h1><p>아이디어를 게임으로, 궁금한 원리를 코드로.<br />직접 만든 결과물과 그 과정을 소개합니다.</p>
+    <div class="project-jumps"><a href="#featured-projects">대표 프로젝트 ↓</a><a href="#mini-projects">미니 프로젝트 ↓</a></div>
+  </header>
+  <section aria-labelledby="featured-projects">
+    <div class="section-heading"><h2 id="featured-projects">대표 프로젝트</h2></div>
+    <div class="project-grid">{featuredProjects.map((project, index) => <ProjectCard project={{...project, number: String(index + 1).padStart(2, '0')}} />)}</div>
+  </section>
+  <section class="section" aria-labelledby="archived-projects">
+    <div class="section-heading"><h2 id="archived-projects">종료한 프로젝트</h2></div>
+    <div class="project-grid">{projects.filter(project => project.slug === 'dx12-mini-engine').map(project => <ProjectCard project={project} />)}</div>
+  </section>
+  <MiniProjects />
+</Base>
+<style>
+  .project-jumps{display:flex;flex-wrap:wrap;gap:12px 28px;margin-top:28px;font-size:13px;color:var(--accent)}
+  .project-jumps a:hover{text-decoration:underline;text-underline-offset:4px}
+  #featured-projects{scroll-margin-top:24px}
+</style>

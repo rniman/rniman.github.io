@@ -1,0 +1,10 @@
+---
+import { notes } from '../data/notes';
+---
+<div class="note-list">
+  {notes.map(note => <a class="note-row" href={note.url}>
+    <span class="note-category">{note.frontmatter.category}</span>
+    <div><h3>{note.frontmatter.title}</h3><p>{note.frontmatter.description}</p></div>
+    <time datetime={note.frontmatter.date}>{note.frontmatter.date.replaceAll('-', '.')}</time><span aria-hidden="true">→</span>
+  </a>)}
+</div>

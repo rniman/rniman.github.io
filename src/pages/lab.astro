@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import { tools } from '../data/tools';
+---
+<Base title="Lab" description="작은 그래픽스 실험과 웹 게임, 개발 도구를 위한 공간입니다.">
+  <section class="page-heading"><p class="eyebrow">EXPERIMENTS / TOOLS / IDEAS</p><h1>호기심을 펼쳐놓는 곳.</h1><p>궁금한 것은 실험하고, 필요한 것은 만들어 봅니다.<br />작은 도구와 그래픽스 실험을 모았습니다.</p></section>
+  {tools.map(tool => (
+    <a class="external-band" href={`/lab/${tool.slug}/`}>
+      <div><p class="eyebrow">{tool.category}</p><h2>{tool.title}</h2><p>{tool.description}</p><p>도구 소개와 실행 방법 →</p></div>
+      <span aria-hidden="true">→</span>
+    </a>
+  ))}
+  <a class="external-band" href="/projects/shader-studies/"><div><p class="eyebrow">GRAPHICS</p><h2>Shader Studies</h2><p>HLSL로 탐구하는 재질과 시각 효과. 프로젝트 소개를 읽어보세요.</p></div><span aria-hidden="true">→</span></a>
+  <div class="lab-placeholder"><span class="eyebrow">NEXT EXPERIMENT</span><h2>다음 실험을 준비 중입니다.</h2><p>직접 플레이할 수 있는 웹 게임과 작은 개발 도구를<br />완성되는 대로 이곳에 추가합니다.</p><a class="text-link" href="https://github.com/rniman">GitHub에서 작업 살펴보기 ↗</a></div>
+</Base>

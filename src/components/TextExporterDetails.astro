@@ -1,0 +1,30 @@
+---
+import { tools } from '../data/tools';
+const tool = tools.find(tool => tool.slug === 'text-exporter')!;
+---
+    <div class="prose">
+      <h2>고정 문장을 게임 UI 텍스처로</h2>
+      <p>메뉴나 안내 문구처럼 미리 정해진 문장을 이미지로 만들어 게임에서 사용할 수 있습니다. WinForms GUI에서 글꼴과 문장을 편집하고 Python·Pillow로 아틀라스를 생성합니다. 문장 ID를 유지하면 텍스트를 수정하거나 번역한 뒤에도 같은 ID로 결과를 찾을 수 있습니다.</p>
+      <p>DirectX 12 프로젝트에서 텍스트를 표시하기 위해 만든 도구입니다. 출력물은 PNG와 JSON이므로 다른 엔진이나 그래픽스 API에서도 활용할 수 있습니다. 사용하는 환경에 맞게 JSON을 읽고 UV 좌표와 알파 블렌딩 설정을 적용하면 됩니다.</p>
+      <h2>주요 기능</h2>
+      {tool.features.map(feature => <section><h3>{feature.title}</h3><p>{feature.text}</p></section>)}
+      <h2>실행 방법</h2>
+      <p>Windows와 Python 3.10 이상이 필요합니다. <code>python</code> 명령으로 Python을 실행할 수 있어야 하며, 최초 Pillow 설치에는 인터넷 연결이 필요합니다. 저장소를 내려받아 로컬에서 실행하는 도구입니다.</p>
+      <ol>
+        <li>저장소의 <code>run.bat</code>을 실행합니다. 처음 실행하면 Pillow 의존성을 설치합니다.</li>
+        <li>폰트와 출력 폴더를 선택하고 표에 ID와 문장을 입력합니다.</li>
+        <li><strong>미리보기 + 검사</strong>로 페이지와 입력 오류를 확인합니다.</li>
+        <li><strong>PNG + JSON 생성</strong>으로 결과를 저장합니다.</li>
+      </ol>
+      <h2>출력과 게임 연동</h2>
+      <ul>
+        <li><code>atlas_N.png</code>: 투명 RGBA8 텍스처 페이지</li>
+        <li><code>atlas.json</code>: 문장 ID별 페이지 번호, UV, 논리 크기와 렌더링 설정</li>
+        <li><code>sprites/ID.png</code>: 개별 문장 PNG 옵션을 켰을 때 생성되는 이미지</li>
+      </ul>
+      <p>게임에서는 ID로 문장 정보를 찾고, <code>texture_index</code>의 텍스처와 좌측 상단을 원점으로 하는 UV를 사용해 사각형을 그립니다. 품질 배율을 높여도 화면상의 크기는 <code>logical_width</code>와 <code>logical_height</code>로 유지할 수 있습니다. 블렌드 설정은 선택한 알파 방식에 맞춰 적용합니다.</p>
+      <p><a href={`${tool.sourceUrl}/tree/HEAD/output/example`}>저장소의 PNG·JSON 출력 예제 보기 ↗</a></p>
+      <h2>구현 구성</h2>
+      <p>PowerShell GUI, GUI가 호출하는 Python CLI, 검사·배치·이미지 생성을 담당하는 생성 엔진으로 구성됩니다. 소스 코드와 문서는 MIT 라이선스이며, 기본 제공 폰트에는 각각 SIL Open Font License 1.1이 적용됩니다.</p>
+      <p class="page-footnote">기능과 실행 조건은 <a href={`${tool.sourceUrl}#readme`}>공개 저장소 README</a>를 기준으로 정리했습니다.</p>
+    </div>

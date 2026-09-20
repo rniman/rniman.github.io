@@ -1,0 +1,134 @@
+---
+import '../styles/global.css';
+interface Props { title?: string; description?: string; }
+const { title = 'Game development, one frame at a time.', description = '신민근의 게임 개발 포트폴리오와 개발 기록. C++, DirectX 12, 렌더링과 작은 실험을 다룹니다.' } = Astro.props;
+const nav = [['/', 'Home'], ['/projects/', 'Projects'], ['/notes/', 'Notes'], ['/lab/', 'Lab'], ['/about/', 'About']];
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f6f5f1" />
+    <script is:inline>
+      (() => {
+        const key = 'rniman-theme';
+        const system = window.matchMedia('(prefers-color-scheme: dark)');
+        let preference = null;
+        try { preference = localStorage.getItem(key); } catch {}
+        if (preference !== 'light' && preference !== 'dark') preference = null;
+        const apply = () => {
+          const dark = preference ? preference === 'dark' : system.matches;
+          document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+          document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#181b20' : '#f6f5f1');
+          const mode = preference || 'system';
+          const label = { light: '라이트', dark: '다크', system: '시스템 설정' }[mode];
+          const button = document.querySelector('[data-theme-toggle]');
+          button?.setAttribute('aria-label', `테마 선택: ${label}`);
+          button?.setAttribute('title', `테마 선택: ${label}`);
+          const icon = document.querySelector('[data-theme-icon]');
+          if (icon) icon.textContent = { light: '☀', dark: '☾', system: '◐' }[mode];
+          document.querySelectorAll('[data-theme-choice]').forEach(option => {
+            option.setAttribute('aria-pressed', String(option.dataset.themeChoice === mode));
+          });
+        };
+        apply();
+        system.addEventListener('change', apply);
+        window.addEventListener('storage', (event) => {
+          if (event.key !== key && event.key !== null) return;
+          preference = event.newValue === 'light' || event.newValue === 'dark' ? event.newValue : null;
+          apply();
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+          const button = document.querySelector('[data-theme-toggle]');
+          const picker = document.querySelector('[data-theme-picker]');
+          const panel = document.querySelector('#theme-options');
+          if (!button || !picker || !panel) return;
+          picker.hidden = false;
+          apply();
+          const close = (restoreFocus = false) => {
+            panel.hidden = true;
+            button.setAttribute('aria-expanded', 'false');
+            if (restoreFocus) button.focus();
+          };
+          button.addEventListener('click', () => {
+            panel.hidden = !panel.hidden;
+            button.setAttribute('aria-expanded', String(!panel.hidden));
+            if (!panel.hidden) panel.querySelector('[aria-pressed="true"]')?.focus();
+          });
+          panel.querySelectorAll('[data-theme-choice]').forEach(option => {
+            option.addEventListener('click', () => {
+              preference = option.dataset.themeChoice === 'system' ? null : option.dataset.themeChoice;
+              try {
+                if (preference) localStorage.setItem(key, preference);
+                else localStorage.removeItem(key);
+              } catch {}
+              apply();
+              close(true);
+            });
+          });
+          document.addEventListener('click', event => {
+            if (!picker.contains(event.target)) close();
+          });
+          picker.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && !panel.hidden) {
+              event.preventDefault();
+              close(true);
+            }
+          });
+          picker.addEventListener('focusout', event => {
+            if (!picker.contains(event.relatedTarget)) close();
+          });
+        });
+      })();
+    </script>
+    <meta property="og:title" content={`${title} — rniman`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} — rniman</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">본문으로 이동</a>
+    <header class="sticky-header">
+      <div class="site-header wrap">
+      <a class="brand" href="/" aria-label="rniman 홈">rniman<span class="brand-dot">.</span></a>
+      <nav aria-label="주 메뉴">
+        {nav.map(([href, label]) => <a href={href} aria-current={(href === '/' ? Astro.url.pathname === '/' : Astro.url.pathname.startsWith(href)) ? 'page' : undefined}>{label}</a>)}
+      </nav>
+      <a class="header-github" href="https://github.com/rniman">GitHub ↗</a>
+      <div class="theme-picker" data-theme-picker hidden>
+        <button class="theme-toggle" data-theme-toggle type="button" aria-label="테마 선택: 시스템 설정" aria-expanded="false" aria-controls="theme-options" title="테마 선택"><span data-theme-icon aria-hidden="true">◐</span></button>
+        <div class="theme-options" id="theme-options" role="group" aria-label="테마 선택" hidden>
+          <button type="button" data-theme-choice="light" aria-pressed="false"><span aria-hidden="true">☀</span> 라이트<span class="theme-check" aria-hidden="true">✓</span></button>
+          <button type="button" data-theme-choice="dark" aria-pressed="false"><span aria-hidden="true">☾</span> 다크<span class="theme-check" aria-hidden="true">✓</span></button>
+          <button type="button" data-theme-choice="system" aria-pressed="true"><span aria-hidden="true">◐</span> 시스템 설정<span class="theme-check" aria-hidden="true">✓</span></button>
+        </div>
+      </div>
+      </div>
+    </header>
+    <script>
+      const header = document.querySelector<HTMLElement>('.sticky-header');
+      if (header) {
+        const updateHeaderHeight = () => {
+          document.documentElement.style.setProperty('--header-height', `${header.getBoundingClientRect().height}px`);
+        };
+        updateHeaderHeight();
+        new ResizeObserver(updateHeaderHeight).observe(header);
+      }
+    </script>
+    <main id="main" class="wrap"><slot /></main>
+    <footer class="site-footer wrap">
+      <div><a class="brand" href="/">rniman<span class="brand-dot">.</span></a><p>게임을 만들고, 원리를 탐구하고, 과정을 기록합니다.</p></div>
+      <div class="footer-links"><a href="https://github.com/rniman">GitHub ↗</a><a href="https://velog.io/@rniman/posts">Velog ↗</a><a href="https://rniman.github.io/convention/">Wiki ↗</a><span class="footer-placeholder">Planner</span><a href="mailto:shinmg00@gmail.com">Email ↗</a></div>
+      <small>© {new Date().getFullYear()} rniman · Built with Astro</small>
+    </footer>
+  </body>
+</html>

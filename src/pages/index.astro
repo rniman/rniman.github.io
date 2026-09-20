@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import NoteList from '../components/NoteList.astro';
+import { projects } from '../data/projects';
+---
+<Base>
+  <section class="hero">
+    <div class="hero-copy"><p class="eyebrow"><span class="blue-dot"></span> GAME DEVELOPMENT & GRAPHICS</p>
+      <h1>작은 호기심에서,<br />플레이 가능한<br /><span class="accent">세계로.</span></h1>
+      <p class="hero-description">게임을 만드는 신민근입니다.<br />게임을 만들고, 그 안의 기술을 탐구합니다.</p>
+      <div class="actions"><a class="button" href="/projects/">프로젝트 둘러보기 <span>→</span></a></div>
+    </div>
+    <div class="hero-diagram" aria-label="점과 선으로 표현한 추상적인 3차원 큐브 일러스트">
+      <div class="diagram-label"><span>THE BUILDING BLOCKS</span><span>XYZ / 001</span></div>
+      <svg viewBox="0 0 400 350" fill="none" aria-hidden="true">
+        <path d="M40 267H365M65 302L335 145M80 160L350 316" stroke="currentColor" opacity=".17" />
+        <g stroke="currentColor" stroke-width="1.5"><path d="M200 44L321 114V254L200 324L79 254V114Z"/><path d="M79 114L200 184L321 114M200 184V324"/><path d="M200 44V184M79 254L200 184L321 254" stroke-dasharray="4 7" opacity=".35"/><path d="M140 79L260 149V289M260 79L140 149V289M79 184L200 254L321 184" opacity=".35"/></g>
+        <path d="M200 44L321 114L200 184L79 114Z" fill="currentColor" opacity=".08"/>
+        <g fill="currentColor"><circle cx="200" cy="44" r="5"/><circle cx="321" cy="114" r="5"/><circle cx="79" cy="114" r="5"/><circle cx="200" cy="184" r="6"/><circle cx="200" cy="324" r="5"/><circle cx="79" cy="254" r="5"/><circle cx="321" cy="254" r="5"/></g>
+      </svg>
+      <div class="diagram-label"><span>IDEA → CODE → PLAY</span><span>그림: 구조의 시작</span></div>
+    </div>
+  </section>
+  <div class="discipline-strip"><span>C++</span><span>DirectX 12</span><span>HLSL</span><span>Rendering</span><span>Game Systems</span></div>
+  <section class="section"><div class="section-heading"><div><p class="eyebrow">01 / SELECTED PROJECTS</p><h2>직접 만든 것들</h2></div><a class="text-link" href="/projects/">모든 프로젝트 →</a></div><div class="project-grid">{projects.slice(0, 2).map(project => <ProjectCard project={project} />)}</div></section>
+  <section class="section"><div class="section-heading"><div><p class="eyebrow">02 / DEVELOPMENT NOTES</p><h2>개발의 흔적</h2></div><a class="text-link" href="/notes/">모든 기록 →</a></div><NoteList /></section>
+  <section class="lab-band"><div><p class="eyebrow">03 / EXPERIMENTS &amp; TOOLS</p><h2>작은 실험도, 하나의 시작.</h2><p>그래픽스 실험부터 웹 게임과 개발 도구까지.<br />아이디어를 하나씩 펼쳐놓는 공간입니다.</p></div><a class="button button-light" href="/lab/">Lab 둘러보기 →</a></section>
+</Base>

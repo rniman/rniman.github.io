@@ -1,0 +1,27 @@
+---
+import Base from '../../layouts/Base.astro';
+import TextExporterDetails from '../../components/TextExporterDetails.astro';
+import MaterialForgeDetails from '../../components/MaterialForgeDetails.astro';
+import { tools } from '../../data/tools';
+
+export function getStaticPaths() {
+  return tools.map(tool => ({ params: { slug: tool.slug }, props: { tool } }));
+}
+const { tool } = Astro.props;
+---
+<Base title={tool.title} description={tool.description}>
+  <article class="article">
+    <a class="back-link" href="/lab/">← Lab 목록</a>
+    <header class="article-heading">
+      <p class="eyebrow">{tool.category}</p>
+      <h1>{tool.title}</h1>
+      <p>{tool.description}</p>
+      <div class="tags">{tool.tags.map(tag => <span>{tag}</span>)}</div>
+    </header>
+    <div class="actions">
+      <a class="button" href={tool.sourceUrl}>소스 코드 ↗</a>
+      <a class="text-link" href={`${tool.sourceUrl}#readme`}>전체 사용 설명서 ↗</a>
+    </div>
+    {tool.slug === 'text-exporter' ? <TextExporterDetails /> : <MaterialForgeDetails />}
+  </article>
+</Base>

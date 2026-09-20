@@ -1,0 +1,25 @@
+---
+import { miniProjects } from '../data/mini-projects';
+const orderedProjects = [...miniProjects].sort((a, b) => Number(Boolean(b.videoId)) - Number(Boolean(a.videoId)));
+---
+<section class="section mini-projects-section" aria-labelledby="mini-projects">
+  <div class="section-heading">
+    <div><h2 id="mini-projects">미니 프로젝트</h2></div>
+  </div>
+  <div class="mini-list">
+    {orderedProjects.map(project => (
+      <article class="mini-project" aria-labelledby={`title-${project.slug}`}>
+        <div class="mini-copy">
+          <p class="mini-meta">{project.meta}</p>
+          <h3 id={`title-${project.slug}`}>{project.title}</h3>
+          <p class="mini-description">{project.description}</p>
+          <div class="tags">{project.tags.map(tag => <span>{tag}</span>)}</div>
+          <div class="project-links">
+            <a href={project.sourceUrl}>{project.sourceLabel} ↗</a>
+            {project.videoId && <a href={`https://www.youtube.com/watch?v=${project.videoId}`}>{project.videoLabel} ↗</a>}
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>

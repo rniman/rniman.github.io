@@ -1,0 +1,55 @@
+---
+import { projects } from '../data/projects';
+type Details = NonNullable<(typeof projects)[number]['details']>;
+interface Props { intro: string; details: Details; }
+const { intro, details } = Astro.props;
+---
+<dl class="project-facts">
+  <div><dt>개발 기간</dt><dd>{details.period}</dd></div>
+  <div><dt>프로젝트</dt><dd>{details.team}</dd></div>
+</dl>
+<figure class="project-video">
+  <iframe
+    src={`https://www.youtube-nocookie.com/embed/${details.videoId}`}
+    title="Nightmare Lab 게임 영상"
+    loading="lazy"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen
+    referrerpolicy="strict-origin-when-cross-origin"
+  ></iframe>
+  <figcaption><a href={details.links[0].href}>{details.links[0].label} ↗</a></figcaption>
+</figure>
+<div class="prose">
+  <section aria-labelledby="contributions">
+    <h2 id="contributions">담당한 작업</h2>
+    <p>{intro}</p>
+    <dl class="contributions">
+      {details.contributions.map(item => <div><dt>{item.title}</dt><dd>{item.text}</dd></div>)}
+    </dl>
+  </section>
+  <section aria-labelledby="improvements">
+    <h2 id="improvements">졸업 후 개인 개선</h2>
+    <p>{details.improvements}</p>
+    <p class="credit">개선 과정에서 AI를 코드 분석과 수정에 활용했습니다.</p>
+  </section>
+</div>
+<nav class="project-sources" aria-label="프로젝트 소스 코드">
+  {details.links.slice(1).map(link => <a href={link.href}>{link.label} ↗</a>)}
+</nav>
+<style>
+  .project-facts{display:flex;flex-wrap:wrap;gap:20px 48px;margin:0 0 28px}
+  .project-facts dt{font-size:12px;color:var(--muted);margin-bottom:6px}
+  .project-facts dd{margin:0;font-size:14px}
+  .project-video{margin:0 0 36px}
+  iframe{display:block;width:100%;aspect-ratio:16/9;border:0;background:var(--ink)}
+  figcaption{margin-top:12px;font-size:12px;color:var(--accent)}
+  .contributions{margin:24px 0 36px}
+  .contributions>div{display:grid;grid-template-columns:130px 1fr;gap:20px;padding:18px 0;border-top:1px solid var(--line)}
+  .contributions dt{font-weight:600}
+  .contributions dd{margin:0;color:var(--muted)}
+  .prose .credit{font-size:12px;color:var(--muted)}
+  .project-sources{margin:32px 0 0;display:flex;flex-wrap:wrap;gap:16px 28px;padding-top:24px;border-top:1px solid var(--line)}
+  .project-sources a{color:var(--accent);font-family:inherit;font-size:13px;font-weight:500;line-height:1.8}
+  a:hover{text-decoration:underline;text-underline-offset:4px}
+  @media(max-width:600px){.contributions>div{grid-template-columns:1fr;gap:6px}}
+</style>

@@ -1,0 +1,43 @@
+// Project facts from the supplied portfolio and the user's video descriptions.
+export const miniProjects = [
+  {
+    slug: 'tower-defense',
+    title: '타워 디펜스',
+    description: 'Python으로 제작한 디펜스 게임. 상태 전환이 가능한 게임 프레임워크와 Behavior Tree 기반 AI를 구현했습니다.',
+    meta: '2022.09–12 · 1인 개발',
+    tags: ['Python', 'Behavior Tree'],
+    sourceLabel: '소스 코드',
+    sourceUrl: 'https://github.com/rniman/project_2dgp',
+  },
+  {
+    slug: 'opengl-pacman',
+    title: '3D 팩맨',
+    description: 'OpenGL로 구현한 3D 팩맨 게임. DFS 기반 미로 생성과 BFS 기반 경로 탐색을 적용했습니다.',
+    meta: '2022.11–12 · 2인 개발',
+    tags: ['C/C++', 'OpenGL'],
+    videoId: 'J_6CsZa6QDY',
+    videoLabel: '플레이 영상',
+    sourceLabel: '소스 코드',
+    sourceUrl: 'https://github.com/rniman/ComputerGraphics-Project',
+  },
+  {
+    slug: 'cuphead',
+    title: '컵헤드 모작',
+    description: 'Windows 프로그래밍 팀 프로젝트로 싱글플레이를 제작한 뒤, 3인 네트워크 과제에서 TCP 기반 멀티플레이로 확장했습니다.',
+    meta: '2022.05–06 · 2인 / 2023.10–12 · 3인',
+    tags: ['C', 'WinAPI', 'TCP'],
+    videoId: 'reEqtGPzslk',
+    videoLabel: '싱글플레이 영상',
+    sourceLabel: '멀티플레이 소스 코드',
+    sourceUrl: 'https://github.com/rniman/netgp_project',
+  },
+  {
+    slug: 'country-information',
+    title: '국가 정보',
+    description: 'Tkinter 기반 국가 정보 프로그램. Open API의 JSON·XML 응답을 파싱해 정보를 제공합니다.',
+    meta: '스크립트 언어 프로젝트',
+    tags: ['Python', 'Tkinter', 'Open API', 'JSON/XML 파싱'],
+    sourceLabel: '소스 코드',
+    sourceUrl: 'https://github.com/rniman/Country_Information',
+  },
+];

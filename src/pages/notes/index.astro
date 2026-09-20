@@ -1,0 +1,10 @@
+---
+import Base from '../../layouts/Base.astro';
+import NoteList from '../../components/NoteList.astro';
+---
+<Base title="Notes" description="게임 개발과 그래픽스에 관한 생각, 학습과 구현 과정을 기록합니다.">
+  <section class="page-heading"><p class="eyebrow">LEARNING / DEVELOPMENT / NOTES</p><h1>배운 것을 남기는 일.</h1><p>개발하며 마주한 문제와 새롭게 이해한 원리.<br />그 과정에서 배운 것들을 기록합니다.</p></section>
+  <NoteList />
+  <a class="external-band" href="https://rniman.github.io/convention/"><div><p class="eyebrow">REFERENCE / WIKI</p><h2>개발 위키</h2><p>개발 문서와 참고 자료를 위키에서 살펴보세요.</p></div><span aria-hidden="true">↗</span></a>
+  <a class="external-band" href="https://velog.io/@rniman/posts"><div><p class="eyebrow">ELSEWHERE / VELOG</p><h2>더 많은 개발 기록</h2><p>Velog에 작성한 글도 함께 읽어보세요.</p></div><span aria-hidden="true">↗</span></a>
+</Base>
