@@ -1,0 +1,67 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/planner-draft.css';
+const projects = [
+  { name: 'RnimanEngine', url: 'https://github.com/rniman/RnimanEngine', stage: '간단한 삼각형 렌더링 구현', target: 'ECS·PBR 구현', percent: 5, tone: 'blue', confirmed: true },
+  { name: 'Unity Shader', url: null, stage: '진행 상태 미정', target: '완성 목표 미정', percent: null, tone: 'green', confirmed: false },
+];
+const days = ['월', '화', '수', '목', '금', '토', '일'];
+const periods = [
+  { label: '오전', time: '10:00–12:00', tasks: ['LeetCode + 엔진', 'LeetCode + 엔진', 'LeetCode + 엔진', 'LeetCode + 엔진', 'LeetCode + 엔진', '자유', '휴식'] },
+  { label: '오후', time: '13:00–18:00', tasks: ['엔진 개발', '엔진 개발', '엔진 개발', '엔진 개발', '엔진 개발', '자유 개발·밀린 작업', '휴식'] },
+  { label: '저녁', time: '19:00–23:00', tasks: ['CS 학습', 'C#·유니티', '개발 지식 학습', 'C#·유니티', '자유·주간 회고', 'AI 탐색·학습', '휴식·다음 주 계획'] },
+  { label: '심야', time: '23:00–25:00', tasks: ['휴식', '자유·휴식', '휴식', '자유·휴식', '자유', '자유·휴식', '휴식'] },
+];
+---
+<Base title="Planner · 디자인 초안" description="월간 목표와 주간 루틴을 정리한 플래너 초안입니다.">
+  <div class="planner">
+    <div class="draft-note"><span class="draft-dot" aria-hidden="true"></span> 디자인 초안 <span>Unity Shader의 진행 정보와 이달의 이미지는 준비 중입니다.</span></div>
+    <header class="planner-heading">
+      <div><p class="eyebrow">PERSONAL SPACE / PLANNER</p><h1>내 페이스대로<span>.</span></h1></div>
+      <div class="edition"><span>2026 / MONTHLY PLAN</span><strong>9월<span class="month-suffix">의 계획</span></strong></div>
+    </header>
+
+    <section class="overview" aria-label="이번 달 목표">
+      <div class="focus-panel"><div class="panel-label"><span>MONTHLY FOCUS</span></div><h2>RnimanEngine</h2><p>삼각형 렌더링에서 ECS·PBR까지, 차근차근.</p><div class="focus-line" aria-hidden="true"></div><span class="outline-word" aria-hidden="true">FOCUS</span></div>
+      <div class="side-panel"><div class="panel-label"><span>이번 달에 남길 결과</span></div><h2>작은 목표, 확실한 마무리.</h2><ol class="monthly-goals"><li>LeetCode 평일 1일 1문제</li><li>인프런 챌린지 30분 학습</li><li>C#, 유니티</li></ol><p class="hint">매일 조금씩 이어갈 학습 루틴</p></div>
+    </section>
+
+    <section class="schedule-section" aria-labelledby="schedule-title">
+      <div class="section-top"><div><p class="eyebrow">WEEKLY ROUTINE</p><h2 id="schedule-title">주간 시간표</h2></div><span class="schedule-note">반복되는 일주일의 기본 틀</span></div>
+      <p class="mobile-hint">좌우로 움직여 한 주를 볼 수 있어요.</p>
+      <div class="schedule-scroll" tabindex="0" role="region" aria-label="주간 시간표, 가로 스크롤 가능">
+        <table class="schedule-table">
+          <caption class="sr-only">오전·오후·저녁·심야 시간대별 주간 시간표. 25:00은 다음 날 01:00입니다.</caption>
+          <thead><tr><th scope="col">시간대</th>{days.map((day, index) => <th scope="col" class:list={{ weekend: index > 4 }}>{day}</th>)}</tr></thead>
+          <tbody>{periods.map(period => <tr><th scope="row"><strong>{period.label}</strong><span>{period.time}</span></th>{days.map((day, index) => <td class:list={{ weekend: index > 4 }}><span class:list={["schedule-task", { "schedule-quiet": !period.tasks[index] || ["자유", "휴식", "자유·휴식"].includes(period.tasks[index]) }]} aria-label={`${day}요일 ${period.label}: ${period.tasks[index] || "미정"}`}>{period.tasks[index] || "—"}</span></td>)}</tr>)}</tbody>
+        </table>
+      </div>
+      <p class="section-note">엔진 = RnimanEngine · 인프런 챌린지는 별도로 30분 학습 · 학습은 시간대 내에서 유연하게 · 25:00 = 다음 날 01:00</p>
+    </section>
+
+    <section class="project-section" aria-labelledby="projects-title">
+      <div class="section-top"><div><p class="eyebrow">WORK IN PROGRESS</p><h2 id="projects-title">진행 중인 프로젝트<span class="project-count">{String(projects.length).padStart(2, "0")}</span></h2></div><span class="sample-tag">진행률 · 직접 기록</span></div>
+      <div class="project-list">
+        {projects.map((project, index) => <article class:list={['project-row', project.tone]}>
+          <div class="project-identity"><span class="project-index">0{index + 1}</span><div><h3>{project.url ? <a class="project-name-link" href={project.url}>{project.name}<span aria-hidden="true"> ↗</span></a> : project.name}</h3><p>{project.stage}</p></div></div>
+          <div class="completion">{project.percent !== null ? <><div class="completion-label"><span>{project.target} 기준</span><strong><small>약 </small>{project.percent}<small>%</small></strong></div><progress value={project.percent} max="100" aria-label={`${project.name}, ${project.target} 기준 완성도`}>{project.percent}%</progress></> : <div class="completion-pending"><span>완성 목표·진행률</span><p>미정</p></div>}</div>
+          <div class="project-next"><span>다음 목표</span><p>세부 목표 미정</p></div>
+        </article>)}
+      </div>
+      <p class="section-note">진행률은 각 프로젝트의 완성 목표를 기준으로 직접 기록하는 값입니다.</p>
+    </section>
+
+    <section class="ongoing-section" aria-labelledby="ongoing-title">
+      <div class="section-top"><div><p class="eyebrow">ONGOING</p><h2 id="ongoing-title">상시 프로젝트</h2></div><span class="schedule-note">완료율 없이 꾸준히 이어가는 작업</span></div>
+      <a class="ongoing-link" href="https://github.com/rniman/Improve_Nightmare_Lab"><div><h3>Improve_Nightmare_Lab</h3><p>지속 개선 중 · GitHub 저장소</p></div><span aria-hidden="true">↗</span></a>
+      <a class="ongoing-link" href="https://github.com/rniman/convention"><div><h3>convention</h3><p>GitHub 저장소</p></div><span aria-hidden="true">↗</span></a>
+      <div class="ongoing-link"><div><h3>Unity Sandbox</h3></div></div>
+    </section>
+
+    <section class="monthly-image" aria-labelledby="monthly-image-title">
+      <div class="section-top"><div><p class="eyebrow">MONTHLY FRAME</p><h2 id="monthly-image-title">이달의 한 장</h2></div></div>
+      <div class="monthly-image-empty"><p>아직 고른 이미지가 없어요.</p><small>이번 달에 남기고 싶은 장면을 담을 자리</small></div>
+    </section>
+  </div>
+</Base>
+
