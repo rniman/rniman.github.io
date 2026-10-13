@@ -1,0 +1,40 @@
+---
+import { projects } from '../data/projects';
+type Project = (typeof projects)[number];
+interface Props {
+  milestones: NonNullable<Project['milestones']>;
+  links: NonNullable<Project['links']>;
+  previousProject: NonNullable<Project['previousProject']>;
+}
+const { milestones, links, previousProject } = Astro.props;
+---
+<div class="prose">
+  <div class="project-links">
+    {links.map(link => <a href={link.href}>{link.label} ↗</a>)}
+  </div>
+  {milestones.map(milestone => <details class="milestone" open>
+    <summary><h2>{milestone.title}</h2></summary>
+    <p class="milestone-meta">{milestone.version} · <time datetime={milestone.date}>{milestone.date}</time></p>
+    <p>{milestone.summary}</p>
+    <figure>
+      <img src={milestone.image} alt={milestone.imageAlt} width="1843" height="1098" loading="lazy" decoding="async" />
+    </figure>
+    <p><a href={milestone.source}>{milestone.version} 소스 코드 ↗</a></p>
+  </details>)}
+  <p class="previous-project"><a href={previousProject.href}>{previousProject.label} →</a></p>
+</div>
+<style>
+  .project-links{display:flex;flex-wrap:wrap;gap:12px 24px;font-size:14px}
+  .milestone{margin-top:32px}
+  .milestone + .milestone{border-top:1px solid var(--line);padding-top:24px}
+  summary{display:flex;align-items:baseline;gap:12px;cursor:pointer;list-style:none;border-radius:3px}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:'›';flex:none;font-size:24px;line-height:1;transform-origin:center}
+  details[open]>summary::before{transform:rotate(90deg)}
+  summary:focus-visible{outline:2px solid var(--accent);outline-offset:6px}
+  .milestone h2{margin:0;font-size:clamp(19px,4vw,23px)}
+  .milestone-meta{font-size:12px;color:var(--muted)}
+  figure{margin:24px 0 16px}
+  img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:4px}
+  .previous-project{border-top:1px solid var(--line);padding-top:24px;margin-top:32px;font-size:13px}
+</style>

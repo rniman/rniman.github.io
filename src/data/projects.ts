@@ -3,14 +3,22 @@
 export const projects = [
   {
     slug: 'rniman-engine', number: '01', title: 'RnimanEngine',
-    category: 'ENGINE', tags: ['진행 중', '비공개 저장소'],
-    description: 'DevMiniEngine 종료 후 새롭게 시작한 엔진 프로젝트. 현재 비공개 저장소에서 개발하고 있습니다.',
+    category: 'ENGINE', tags: ['C++20', 'DirectX 12', '진행 중'],
+    description: '작은 데모부터 단계적으로 확장하는 DirectX 12 기반 미니 게임 엔진.',
     intro: '이전 DevMiniEngine 프로젝트를 종료하고 RnimanEngine으로 새롭게 개발을 진행하고 있습니다.',
-    lifecycle: {
-      status: '진행 중 · 저장소 비공개',
-      note: '현재 소스 코드는 공개하지 않습니다.',
-      links: [{ label: '이전 프로젝트 DevMiniEngine', href: '/projects/dx12-mini-engine/' }],
-    },
+    links: [
+      { label: '개발 컨벤션 Wiki', href: 'https://rniman.github.io/convention/projects/rniman-engine/' },
+    ],
+    milestones: [
+      {
+        version: 'v0.1.0', title: 'Sandbox 기본 렌더링', date: '2026-10-13',
+        summary: 'DirectX 12로 텍스처와 Phong 조명을 적용한 큐브 3개를 렌더링합니다. 카메라 이동과 방향광 조절을 지원합니다.',
+        image: '/images/projects/rniman-engine/v0.1.0-sandbox.png',
+        imageAlt: 'Sandbox 실행 화면: 파란 배경에 벽돌 텍스처와 조명이 적용된 크기와 배치가 다른 큐브 3개',
+        source: 'https://github.com/rniman/RnimanEngine/tree/v0.1.0',
+      },
+    ],
+    previousProject: { label: '이전 프로젝트 DevMiniEngine', href: '/projects/dx12-mini-engine/' },
     topics: [],
   },
   {
@@ -57,7 +65,7 @@ export const projects = [
     },
     lifecycle: {
       status: '개발 종료',
-      note: '새로운 엔진 개발은 RnimanEngine에서 진행합니다. RnimanEngine 저장소는 현재 비공개입니다.',
+      note: '새로운 엔진 개발은 RnimanEngine에서 진행합니다.',
       links: [
         { label: 'DevMiniEngine 소스 코드', href: 'https://github.com/rniman/DevMiniEngine' },
         { label: '프로젝트 회고 원문 · 2026.09.07', href: 'https://github.com/rniman/DevMiniEngine/blob/HEAD/Docs/Retrospective.md' },
