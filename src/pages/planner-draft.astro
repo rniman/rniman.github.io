@@ -18,12 +18,12 @@ const periods = [
     <div class="draft-note"><span class="draft-dot" aria-hidden="true"></span> 디자인 초안 <span>Unity Shader의 진행 정보와 이달의 이미지는 준비 중입니다.</span></div>
     <header class="planner-heading">
       <div><p class="eyebrow">PERSONAL SPACE / PLANNER</p><h1>내 페이스대로<span>.</span></h1></div>
-      <div class="edition"><span>2026 / MONTHLY PLAN</span><strong>9월<span class="month-suffix">의 계획</span></strong></div>
+      <div class="edition"><span>2026 / MONTHLY PLAN</span><strong>10월<span class="month-suffix">의 계획</span></strong></div>
     </header>
 
     <section class="overview" aria-label="이번 달 목표">
       <div class="focus-panel"><div class="panel-label"><span>MONTHLY FOCUS</span></div><h2>RnimanEngine</h2><p>삼각형 렌더링에서 ECS·PBR까지, 차근차근.</p><div class="focus-line" aria-hidden="true"></div><span class="outline-word" aria-hidden="true">FOCUS</span></div>
-      <div class="side-panel"><div class="panel-label"><span>이번 달에 남길 결과</span></div><h2>작은 목표, 확실한 마무리.</h2><ol class="monthly-goals"><li>LeetCode 평일 1일 1문제</li><li>인프런 챌린지 30분 학습</li><li>C#, 유니티</li></ol><p class="hint">매일 조금씩 이어갈 학습 루틴</p></div>
+      <div class="side-panel"><div class="panel-label"><span>이번 달에 남길 결과</span></div><h2>작은 목표, 확실한 마무리.</h2><ol class="monthly-goals"><li>LeetCode 평일 1일 1문제</li><li>C#, 유니티</li></ol><p class="hint">매일 조금씩 이어갈 학습 루틴</p></div>
     </section>
 
     <section class="schedule-section" aria-labelledby="schedule-title">
@@ -36,7 +36,7 @@ const periods = [
           <tbody>{periods.map(period => <tr><th scope="row"><strong>{period.label}</strong><span>{period.time}</span></th>{days.map((day, index) => <td class:list={{ weekend: index > 4 }}><span class:list={["schedule-task", { "schedule-quiet": !period.tasks[index] || ["자유", "휴식", "자유·휴식"].includes(period.tasks[index]) }]} aria-label={`${day}요일 ${period.label}: ${period.tasks[index] || "미정"}`}>{period.tasks[index] || "—"}</span></td>)}</tr>)}</tbody>
         </table>
       </div>
-      <p class="section-note">엔진 = RnimanEngine · 인프런 챌린지는 별도로 30분 학습 · 학습은 시간대 내에서 유연하게 · 25:00 = 다음 날 01:00</p>
+      <p class="section-note">엔진 = RnimanEngine · 학습은 시간대 내에서 유연하게 · 25:00 = 다음 날 01:00</p>
     </section>
 
     <section class="project-section" aria-labelledby="projects-title">
@@ -61,6 +61,17 @@ const periods = [
     <section class="monthly-image" aria-labelledby="monthly-image-title">
       <div class="section-top"><div><p class="eyebrow">MONTHLY FRAME</p><h2 id="monthly-image-title">이달의 한 장</h2></div></div>
       <div class="monthly-image-empty"><p>아직 고른 이미지가 없어요.</p><small>이번 달에 남기고 싶은 장면을 담을 자리</small></div>
+    </section>
+
+    <section class="planner-principles" aria-labelledby="principles-title">
+      <div class="section-top"><div><p class="eyebrow">BACK TO BASICS</p><h2 id="principles-title">막힐 때 돌아올 원칙</h2></div></div>
+      <ol class="principles-list">
+        <li><div><h3>작게라도, 직접 만든다.</h3><p>배우는 데서 멈추지 말자. 내 힘으로 끝낸 작은 결과물 하나를 남기자.</p></div></li>
+        <li><div><h3>준비보다 시작이 먼저다.</h3><p>부족하다고 느끼면 다시 만들기로 돌아가자. 자신감은 준비가 끝났을 때가 아니라, 내 결과물이 쌓일 때 생긴다.</p></div></li>
+        <li><div><h3>몰아붙이기보다 꾸준히 한다.</h3><p>초반의 의욕을 전부 쏟기보다 매일 조금씩 코드를 쓰자. 즐겁게, 오래 갈 수 있는 내 속도로.</p></div></li>
+        <li><div><h3>목록보다 만들고 싶은 것을 따른다.</h3><p>공부 목록을 채우는 데만 매달리지 말자. 만들고 싶은 프로젝트에서 필요한 것을 배우고, 그 과정을 포트폴리오로 남기자.</p></div></li>
+        <li><div><h3>끝낼 날짜와 범위를 정한다.</h3><p>막연히 공부하지 말고, 언제까지 무엇을 만들지 정하자. 적당한 기한으로 나를 움직이되, 벅차면 범위를 줄여서 완성하자.</p></div></li>
+      </ol>
     </section>
   </div>
 </Base>
